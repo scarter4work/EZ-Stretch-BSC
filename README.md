@@ -1,8 +1,8 @@
 # EZ Stretch BSC
 
-A collection of PixInsight stretching scripts for astrophotography.
+A collection of PixInsight tools for astrophotography - stretching scripts and Bayesian stacking.
 
-## Scripts
+## Scripts (PJSR)
 
 ### PhotometricStretch
 Physics-based RGB asinh stretch with automatic sensor/filter detection from FITS metadata. Combines Lupton RGB mathematics, RNC-Color-Stretch workflow, and Veralux sensor-aware QE weighting.
@@ -31,6 +31,21 @@ Implementation of Roger N. Clark's rnc-color-stretch algorithm for advanced imag
 - Automatic sky calibration
 - Color recovery to preserve original ratios
 - Multiple S-curve variants
+
+## Native Modules (C++/Julia)
+
+### BayesianAstro (In Development)
+Distribution-aware image stacking with per-pixel confidence scoring. Uses Welford's algorithm for statistical accumulation, automatic distribution classification, and GPU acceleration via CUDA.
+
+**Features:**
+- Per-pixel statistical distribution tracking
+- Distribution classification (Gaussian, Poisson, Bimodal, Skewed, Uniform)
+- Confidence scoring based on distribution properties
+- Multiple fusion strategies (MLE, confidence-weighted, lucky imaging, multi-scale)
+- GPU acceleration (CUDA.jl)
+- React-based UI embedded in PixInsight via Qt WebView
+
+**Status:** Awaiting PixInsight certified developer access. See [BayesianAstro/README.md](BayesianAstro/README.md) for details.
 
 ## Installation
 
