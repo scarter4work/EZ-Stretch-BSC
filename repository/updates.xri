@@ -6,11 +6,13 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="LuptonRGB_v1.0.13.zip" sha1="d5ca79c85f357f352692bd691379eda597fc1c47" type="script" releaseDate="20251230">
+      <package fileName="LuptonRGB_v1.0.14.zip" sha1="5e470ad52f17a6625774ed663a82a84b9fc3a5ae" type="script" releaseDate="20251230">
          <title>Lupton RGB Stretch</title>
          <description>
-            <p><b>Lupton RGB Stretch v1.0.13</b></p>
+            <p><b>Lupton RGB Stretch v1.0.14</b></p>
             <p>Color-preserving arcsinh stretch based on Lupton et al. (2004) PASP 116:133</p>
+            <p><b>Changes in v1.0.14:</b></p>
+            <p>- Moved to EZ Stretch BSC menu</p>
             <p><b>Features:</b></p>
             <p>- Arcsinh stretch with configurable alpha and Q parameters</p>
             <p>- Color-preserving clipping (prevents star color blowout)</p>
@@ -18,11 +20,13 @@
             <p>- Saturation boost post-processing</p>
          </description>
       </package>
-      <package fileName="RNC-ColorStretch_v1.0.9.zip" sha1="f313a2b7704615874a536679e2c38fb55a60ee14" type="script" releaseDate="20251230">
+      <package fileName="RNC-ColorStretch_v1.0.10.zip" sha1="37b9851aaabe8b1b7d2eaa209e8e5b6e2669c022" type="script" releaseDate="20251230">
          <title>RNC-ColorStretch</title>
          <description>
-            <p><b>RNC-ColorStretch v1.0.9</b></p>
+            <p><b>RNC-ColorStretch v1.0.10</b></p>
             <p>Advanced image stretching with active color recovery based on Roger N. Clark's algorithm.</p>
+            <p><b>Changes in v1.0.10:</b></p>
+            <p>- Moved to EZ Stretch BSC menu</p>
             <p><b>Features:</b></p>
             <p>- Power stretch with configurable root power (1-599)</p>
             <p>- Two-pass stretch option for finer control</p>
@@ -31,11 +35,13 @@
             <p>- Four S-curve options for additional contrast</p>
          </description>
       </package>
-      <package fileName="PhotometricStretch_v1.0.21.zip" sha1="0af029a9b4d869846c424a7d64cfc5ace60f10c8" type="script" releaseDate="20251230">
+      <package fileName="PhotometricStretch_v1.0.22.zip" sha1="d5998958ebeecd8bea3e76ba25356bd0c15c095f" type="script" releaseDate="20251230">
          <title>Photometric Stretch Engine</title>
          <description>
-            <p><b>Photometric Stretch Engine v1.0.21</b></p>
+            <p><b>Photometric Stretch Engine v1.0.22</b></p>
             <p>Physics-based RGB stretch with automatic sensor/filter detection from FITS metadata.</p>
+            <p><b>Changes in v1.0.22:</b></p>
+            <p>- Moved to EZ Stretch BSC menu</p>
             <p><b>Features:</b></p>
             <p>- Automatic hardware detection from FITS headers</p>
             <p>- Physics-based RGB weights from QE x filter curves</p>

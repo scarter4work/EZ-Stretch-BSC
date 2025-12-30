@@ -11,7 +11,7 @@
  * - Automatic hardware detection from FITS metadata
  */
 
-#feature-id    PhotometricStretch
+#feature-id    EZ Stretch BSC > PhotometricStretch
 #feature-info  Physics-based RGB stretch with automatic sensor/filter detection
 
 // PJSR standard library includes
@@ -31,7 +31,7 @@
 #include "lib/LuptonStretch.js"
 #include "lib/UIComponents.js"
 
-#define VERSION "1.0.21"
+#define VERSION "1.0.22"
 #define TITLE "Photometric Stretch Engine"
 
 /**
