@@ -11,6 +11,9 @@ Thumbs.db
 # Claude Code
 .claude/
 
+# Node.js
+node_modules/
+
 # Temporary files
 *.tmp
 *.bak

@@ -3,7 +3,7 @@
  */
 
 import { useEffect, useState, useCallback } from 'react';
-import type { BayesianAstroBridge, ProcessingState, FusionStrategy } from '../types/bridge';
+import type { BayesianAstroBridge, ProcessingState } from '../types/bridge';
 
 interface BridgeState {
   connected: boolean;

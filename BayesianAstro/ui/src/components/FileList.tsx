@@ -18,9 +18,11 @@ export function FileList({ files, onAddFiles, onRemoveFile, onClearFiles, disabl
     if (disabled) return;
 
     const paths: string[] = [];
-    for (const file of e.dataTransfer.files) {
+    for (const file of Array.from(e.dataTransfer.files)) {
       if (file.name.toLowerCase().endsWith('.fits') || file.name.toLowerCase().endsWith('.fit')) {
-        paths.push(file.path || file.name);
+        // In Qt WebEngine, we may get path from webkitRelativePath or just use name
+        const filePath = (file as unknown as { path?: string }).path || file.name;
+        paths.push(filePath);
       }
     }
     if (paths.length > 0) {
