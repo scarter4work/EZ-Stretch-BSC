@@ -1,12 +1,17 @@
 """
 FITS file I/O operations for astronomical image data.
+
+Provides functions for reading/writing FITS files and extracting metadata
+from headers for use in the Bayesian stacking pipeline.
 """
 module FitsIO
 
 using FITSIO
+using Dates
 using ..BayesianAstro: FrameMetadata, ImageStack
 
 export load_fits, save_fits, load_frame_sequence, get_fits_metadata
+export load_fits_cube, find_fits_files, parse_fits_date
 
 """
     load_fits(filepath::String) -> Matrix{Float32}
@@ -89,36 +94,124 @@ function save_fits(filepath::String, data::AbstractArray{T,3}; header_cards::Dic
 end
 
 """
+    parse_fits_date(datestr::String) -> Float64
+
+Parse a FITS DATE-OBS string to Unix timestamp.
+Supports formats:
+- YYYY-MM-DDTHH:MM:SS.sss (ISO 8601)
+- YYYY-MM-DD
+- DD/MM/YY (old format)
+"""
+function parse_fits_date(datestr::String)::Float64
+    datestr = strip(datestr)
+
+    # Try ISO 8601 format: YYYY-MM-DDTHH:MM:SS.sss
+    try
+        if occursin('T', datestr)
+            # Handle optional fractional seconds
+            if occursin('.', datestr)
+                dt = DateTime(datestr[1:min(23, length(datestr))], dateformat"yyyy-mm-ddTHH:MM:SS.sss")
+            else
+                dt = DateTime(datestr[1:min(19, length(datestr))], dateformat"yyyy-mm-ddTHH:MM:SS")
+            end
+            return datetime2unix(dt)
+        end
+    catch; end
+
+    # Try date-only format: YYYY-MM-DD
+    try
+        if occursin('-', datestr) && length(datestr) >= 10
+            dt = DateTime(datestr[1:10], dateformat"yyyy-mm-dd")
+            return datetime2unix(dt)
+        end
+    catch; end
+
+    # Try old format: DD/MM/YY
+    try
+        if occursin('/', datestr)
+            dt = DateTime(datestr, dateformat"dd/mm/yy")
+            return datetime2unix(dt)
+        end
+    catch; end
+
+    return 0.0
+end
+
+"""
+    get_header_value(hdr, keys...; default=nothing)
+
+Try multiple header keys and return the first found value.
+"""
+function get_header_value(hdr, keys...; default=nothing)
+    for key in keys
+        try
+            if haskey(hdr, key)
+                val = hdr[key]
+                if val !== nothing && val != ""
+                    return val
+                end
+            end
+        catch
+            continue
+        end
+    end
+    return default
+end
+
+"""
     get_fits_metadata(filepath::String) -> FrameMetadata
 
 Extract metadata from FITS header to construct FrameMetadata.
-Attempts to read common keywords for FWHM, background, etc.
+Attempts to read common keywords for FWHM, background, noise, and timestamp.
+
+# Supported Keywords
+- FWHM: FWHM, SEEING, AVGFWHM
+- Background: BACKGRND, SKYLEVEL, PEDESTAL, BACKGROUND
+- Noise: NOISE, RDNOISE, READNOIS
+- Timestamp: DATE-OBS, JD, MJD-OBS
 """
 function get_fits_metadata(filepath::String)::FrameMetadata
     f = FITS(filepath, "r")
     try
         hdr = read_header(f[1])
-        
+
         # Try to extract common metadata keywords
-        fwhm = get(hdr, "FWHM", get(hdr, "SEEING", 0.0f0))
-        background = get(hdr, "BACKGRND", get(hdr, "SKYLEVEL", 0.0f0))
-        noise = get(hdr, "NOISE", get(hdr, "RDNOISE", 0.0f0))
-        
+        fwhm_val = get_header_value(hdr, "FWHM", "SEEING", "AVGFWHM"; default=0.0)
+        background_val = get_header_value(hdr, "BACKGRND", "SKYLEVEL", "PEDESTAL", "BACKGROUND"; default=0.0)
+        noise_val = get_header_value(hdr, "NOISE", "RDNOISE", "READNOIS"; default=0.0)
+
         # Try to get timestamp
         timestamp = 0.0
-        if haskey(hdr, "DATE-OBS")
-            # TODO: Parse DATE-OBS to Unix timestamp
-            timestamp = 0.0
-        elseif haskey(hdr, "JD")
-            # Julian date to Unix timestamp (approximate)
-            timestamp = (hdr["JD"] - 2440587.5) * 86400.0
+
+        # Try DATE-OBS first
+        date_obs = get_header_value(hdr, "DATE-OBS"; default=nothing)
+        if date_obs !== nothing && date_obs != ""
+            timestamp = parse_fits_date(string(date_obs))
         end
-        
+
+        # Fall back to Julian Date
+        if timestamp == 0.0
+            jd = get_header_value(hdr, "JD", "JD-OBS"; default=nothing)
+            if jd !== nothing
+                # Julian date to Unix timestamp
+                timestamp = (Float64(jd) - 2440587.5) * 86400.0
+            end
+        end
+
+        # Fall back to Modified Julian Date
+        if timestamp == 0.0
+            mjd = get_header_value(hdr, "MJD-OBS", "MJD"; default=nothing)
+            if mjd !== nothing
+                # MJD to Unix timestamp (MJD epoch is 1858-11-17)
+                timestamp = (Float64(mjd) + 2400000.5 - 2440587.5) * 86400.0
+            end
+        end
+
         return FrameMetadata(
             filepath;
-            fwhm=Float32(fwhm),
-            background=Float32(background),
-            noise=Float32(noise),
+            fwhm=Float32(fwhm_val),
+            background=Float32(background_val),
+            noise=Float32(noise_val),
             weight=1.0f0,
             timestamp=timestamp
         )

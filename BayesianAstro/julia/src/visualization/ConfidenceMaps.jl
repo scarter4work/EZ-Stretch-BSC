@@ -5,7 +5,8 @@ Generates confidence maps, distribution overlays, and diagnostic images.
 """
 module ConfidenceMaps
 
-using ..BayesianAstro: PixelResult, DistributionType
+using ..BayesianAstro: PixelResult, DistributionType,
+                       GAUSSIAN, POISSON, BIMODAL, SKEWED_RIGHT, SKEWED_LEFT, UNIFORM, UNKNOWN
 using Images: RGB, Gray, colorview
 
 export generate_confidence_map, generate_classification_map

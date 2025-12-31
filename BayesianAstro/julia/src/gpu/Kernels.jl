@@ -15,6 +15,9 @@ module Kernels
 using ..BayesianAstro: PixelDistribution, PixelResult, DistributionType,
                        ProcessingConfig, CUDA_AVAILABLE, GAUSSIAN, POISSON,
                        BIMODAL, SKEWED_RIGHT, SKEWED_LEFT, UNIFORM, UNKNOWN
+using ..Welford: variance, skewness, kurtosis
+using ..Classification: classify_distribution
+using ..Confidence: compute_confidence
 
 export gpu_accumulate!, gpu_finalize!, gpu_fuse!, gpu_stretch!
 export is_gpu_available, create_gpu_context, destroy_gpu_context
@@ -676,11 +679,6 @@ function cpu_finalize!(distributions::Matrix{PixelDistribution})
     output = Matrix{Float32}(undef, height, width)
     confidence = Matrix{Float32}(undef, height, width)
     dist_types = Matrix{DistributionType}(undef, height, width)
-
-    # Import needed functions
-    using ..Welford: variance, skewness, kurtosis
-    using ..Classification: classify_distribution
-    using ..Confidence: compute_confidence
 
     Threads.@threads for j in 1:width
         for i in 1:height

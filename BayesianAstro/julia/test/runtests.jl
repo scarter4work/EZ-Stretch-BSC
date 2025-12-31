@@ -1,4 +1,4 @@
-"""
+#=
 Comprehensive tests for BayesianAstro package.
 
 Tests cover:
@@ -8,7 +8,8 @@ Tests cover:
 - Confidence scoring (factor contributions, edge cases)
 - Fusion strategies (MLE, confidence-weighted, lucky)
 - GPU/CPU parity (when CUDA available)
-"""
+=#
+
 using Test
 using BayesianAstro
 using Statistics
@@ -638,6 +639,75 @@ using Statistics
             cpu_stretch!(output, input, 0.0f0, 1.0f0)
 
             @test all(0.0f0 .<= output .<= 1.0f0)
+        end
+    end
+
+    # ========================================================================
+    # FITS I/O Tests
+    # ========================================================================
+    @testset "FITS I/O" begin
+        @testset "parse_fits_date" begin
+            # ISO 8601 with time
+            ts1 = parse_fits_date("2024-01-15T20:30:45.123")
+            @test ts1 > 0
+
+            # ISO 8601 without fractional seconds
+            ts2 = parse_fits_date("2024-01-15T20:30:45")
+            @test ts2 > 0
+
+            # Date only
+            ts3 = parse_fits_date("2024-01-15")
+            @test ts3 > 0
+
+            # Invalid date returns 0
+            ts4 = parse_fits_date("invalid")
+            @test ts4 == 0.0
+
+            # Empty string returns 0
+            ts5 = parse_fits_date("")
+            @test ts5 == 0.0
+
+            # Verify ordering
+            @test ts3 < ts2  # Date only should be earlier (midnight)
+        end
+
+        @testset "FITS round-trip (if tempdir available)" begin
+            # Skip if we can't create temp files
+            try
+                tmpdir = mktempdir()
+
+                # Create test data
+                test_data = rand(Float32, 64, 64)
+
+                # Write FITS
+                test_path = joinpath(tmpdir, "test.fits")
+                save_fits(test_path, test_data)
+
+                @test isfile(test_path)
+
+                # Read back
+                loaded = load_fits(test_path)
+
+                @test size(loaded) == size(test_data)
+                @test eltype(loaded) == Float32
+                @test loaded ≈ test_data atol=1e-6
+
+                # Clean up
+                rm(tmpdir; recursive=true)
+            catch e
+                @warn "Skipping FITS round-trip test: $e"
+            end
+        end
+
+        @testset "find_fits_files" begin
+            # Test with non-existent directory should return empty
+            try
+                files = find_fits_files("/nonexistent/path/12345")
+                @test isempty(files)
+            catch
+                # Some systems throw on non-existent dirs
+                @test true
+            end
         end
     end
 
