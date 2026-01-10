@@ -37,7 +37,7 @@ echo "============================================"
 echo ""
 
 # Check for standalone mode
-if [ "$1" = "--standalone" ] || [ "$1" = "-s" ]; then
+if [ "$1" = "--standalone" ] || [ "$1" = "--stand-alone" ] || [ "$1" = "-s" ]; then
     echo "Using standalone signing tool..."
     echo ""
 
