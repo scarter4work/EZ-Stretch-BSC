@@ -12,6 +12,7 @@
  */
 
 #feature-id    EZ Stretch BSC > PhotometricStretch
+#script-id     PhotometricStretch
 #feature-info  Physics-based RGB stretch with automatic sensor/filter detection
 
 // PJSR standard library includes

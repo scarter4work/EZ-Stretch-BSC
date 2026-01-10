@@ -10,6 +10,7 @@
 // ============================================================================
 
 #feature-id    EZ Stretch BSC > RNC-ColorStretch
+#script-id     RNC-ColorStretch
 #feature-info  <b>RNC-ColorStretch</b> is an advanced image stretching algorithm \
    designed specifically for astrophotography. Unlike traditional stretching methods \
    that cause color loss (especially in faint nebulae and star fields), RNC-ColorStretch \

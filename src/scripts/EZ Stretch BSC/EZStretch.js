@@ -10,6 +10,7 @@
 // ============================================================================
 
 #feature-id    EZ Stretch BSC > EZ Stretch
+#script-id     EZStretch
 #feature-info  Unified stretch suite combining Lupton RGB, RNC-ColorStretch, \
                and PhotometricStretch into a single interface. Select your \
                algorithm and adjust parameters with real-time preview.
