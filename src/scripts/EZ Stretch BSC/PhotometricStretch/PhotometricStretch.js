@@ -24,6 +24,11 @@
 #include <pjsr/TextAlign.jsh>
 #include <pjsr/DataType.jsh>
 
+// Version check - require PixInsight 1.8.0 or higher
+#iflt __PI_VERSION__ 01.08.00
+#error This script requires PixInsight 1.8.0 or higher.
+#endif
+
 // Local library includes
 #include "lib/FITSMetadataParser.js"
 #include "lib/HardwareMatcher.js"
@@ -34,6 +39,9 @@
 
 #define VERSION "1.0.22"
 #define TITLE "Photometric Stretch Engine"
+
+// Enable automatic garbage collection
+var jsAutoGC = true;
 
 /**
  * Main dialog for Photometric Stretch

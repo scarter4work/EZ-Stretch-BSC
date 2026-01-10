@@ -39,6 +39,14 @@
 #include <pjsr/UndoFlag.jsh>
 #include <pjsr/ImageOp.jsh>
 
+// Version check - require PixInsight 1.8.0 or higher
+#iflt __PI_VERSION__ 01.08.00
+#error This script requires PixInsight 1.8.0 or higher.
+#endif
+
+// Enable automatic garbage collection
+var jsAutoGC = true;
+
 // ============================================================================
 // RNCColorStretchParameters - Parameter container and persistence
 // ============================================================================
