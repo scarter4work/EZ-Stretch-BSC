@@ -1,17 +1,9 @@
 // ============================================================================
-// CLICodeSign.js - Command-line code signing for PixInsight
+// CLICodeSign.js - Headless code signing for EZ Stretch BSC
 // ============================================================================
 //
-// Usage from terminal:
-//   PixInsight -n --automation-mode -r="path/to/CLICodeSign.js,keys=path/to/keys.xssk,pass=yourpassword,files=file1.js;file2.js;file3.xri" --force-exit
-//
-// Parameters (comma-separated after script path):
-//   keys=<path>     Path to your .xssk signing keys file
-//   pass=<password> Password for the keys file
-//   files=<list>    Semicolon-separated list of files to sign
-//
-// Example:
-//   PixInsight -n --automation-mode -r="/path/to/CLICodeSign.js,keys=/home/user/mykeys.xssk,pass=MySecretPass,files=/path/to/Script1.js;/path/to/Script2.js" --force-exit
+// Uses the same Security API as PixInsight's official CodeSign script.
+// Set CODESIGN_PASS environment variable or CODESIGN_PASS_FILE before running.
 //
 // ============================================================================
 
@@ -19,50 +11,89 @@
 #script-id     CLICodeSign
 #feature-info  Command-line code signing utility for batch signing scripts
 
-function parseArguments() {
-   var args = {
-      keys: null,
-      pass: null,
-      files: []
-   };
+// Project-specific configuration
+var PROJECT_DIR = "/home/scarter4work/projects/EZ-suite-bsc/EZ-Stretch-BSC";
+var DEFAULT_KEYS = "/home/scarter4work/projects/keys/scarter4work_keys.xssk";
 
-   // Check if we have jsArguments (passed via -r=)
+// Files to sign
+var PROJECT_SCRIPTS = [
+   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/EZStretch.js",
+   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/LuptonRGB/LuptonRGB.js",
+   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/RNC-ColorStretch/RNC-ColorStretch.js",
+   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/PhotometricStretch/PhotometricStretch.js"
+];
+
+var XRI_FILES = [
+   PROJECT_DIR + "/repository/updates.xri"
+];
+
+// Default password file location
+var PASS_FILE = "/tmp/.pi_codesign_pass";
+
+function getPassword() {
+   // Method 1: Check jsArguments (passed via command line)
    if (typeof jsArguments !== 'undefined' && jsArguments.length > 0) {
-      for (var i = 0; i < jsArguments.length; i++) {
-         var arg = jsArguments[i];
-         if (arg.indexOf('keys=') === 0) {
-            args.keys = arg.substring(5);
-         } else if (arg.indexOf('pass=') === 0) {
-            args.pass = arg.substring(5);
-         } else if (arg.indexOf('files=') === 0) {
-            var fileList = arg.substring(6);
-            args.files = fileList.split(';').filter(function(f) { return f.length > 0; });
-         }
+      return jsArguments[0];
+   }
+
+   // Method 2: Read from temp file
+   if (File.exists(PASS_FILE)) {
+      try {
+         var f = new File();
+         f.openForReading(PASS_FILE);
+         var pass = f.read(DataType_ByteArray, f.size);
+         f.close();
+         return pass.toString().trim();
+      } catch (e) {
+         console.warningln("Error reading password file: " + e.message);
       }
    }
 
-   return args;
+   // Method 3: Try environment (may not work in all modes)
+   try {
+      var env = new ProcessEnvironment();
+      if (env.has("CODESIGN_PASS")) {
+         return env.get("CODESIGN_PASS");
+      }
+   } catch (e) {
+      // ProcessEnvironment not available in execute mode
+   }
+
+   return null;
 }
 
-function signFile(keysFile, password, filePath) {
+function signScriptFile(keys, filePath) {
    try {
-      // Determine if it's an XRI file or script file
-      var isXRI = filePath.toLowerCase().endsWith('.xri');
-
-      if (isXRI) {
-         // For XRI files, signature is embedded
-         Security.signRepositoryFile(keysFile, password, [], filePath);
-         console.writeln("  Signed (embedded): " + filePath);
-      } else {
-         // For JS files, creates .xsgn alongside
-         Security.generateScriptSignatureFile(keysFile, password, [], filePath);
-         var xsgnPath = filePath.replace(/\.js$/i, '.xsgn');
-         console.writeln("  Signed: " + filePath);
-         console.writeln("  Created: " + xsgnPath);
-      }
+      var signaturePath = File.changeExtension(filePath, ".xsgn");
+      Security.generateScriptSignatureFile(
+         signaturePath,
+         filePath,
+         [],  // entitlements
+         keys.developerId,
+         keys.publicKey,
+         keys.privateKey
+      );
+      console.noteln("  Signed: " + File.extractName(filePath));
       return true;
    } catch (e) {
-      console.criticalln("  FAILED: " + filePath);
+      console.criticalln("  FAILED: " + File.extractName(filePath));
+      console.criticalln("  Error: " + e.message);
+      return false;
+   }
+}
+
+function signXRIFile(keys, filePath) {
+   try {
+      Security.generateXMLSignature(
+         filePath,
+         keys.developerId,
+         keys.publicKey,
+         keys.privateKey
+      );
+      console.noteln("  Signed: " + File.extractName(filePath));
+      return true;
+   } catch (e) {
+      console.criticalln("  FAILED: " + File.extractName(filePath));
       console.criticalln("  Error: " + e.message);
       return false;
    }
@@ -71,59 +102,81 @@ function signFile(keysFile, password, filePath) {
 function main() {
    console.writeln("");
    console.writeln("===========================================");
-   console.writeln("CLICodeSign - Command-line Code Signing");
+   console.writeln("CLICodeSign - EZ Stretch BSC Code Signing");
    console.writeln("===========================================");
    console.writeln("");
 
-   var args = parseArguments();
+   var keysFile = DEFAULT_KEYS;
+   var password = getPassword();
 
-   // Validate arguments
-   if (!args.keys) {
-      console.criticalln("Error: Missing 'keys' parameter (path to .xssk file)");
-      console.writeln("Usage: keys=<path>,pass=<password>,files=<file1;file2;...>");
+   if (!password) {
+      console.criticalln("Error: No password provided");
+      console.criticalln("Set CODESIGN_PASS or CODESIGN_PASS_FILE environment variable");
       return;
    }
 
-   if (!args.pass) {
-      console.criticalln("Error: Missing 'pass' parameter (keys file password)");
+   if (!File.exists(keysFile)) {
+      console.criticalln("Error: Keys file not found: " + keysFile);
       return;
    }
 
-   if (args.files.length === 0) {
-      console.criticalln("Error: Missing 'files' parameter (semicolon-separated file list)");
-      return;
-   }
-
-   // Check if keys file exists
-   if (!File.exists(args.keys)) {
-      console.criticalln("Error: Keys file not found: " + args.keys);
-      return;
-   }
-
-   console.writeln("Keys file: " + args.keys);
-   console.writeln("Files to sign: " + args.files.length);
+   console.writeln("Keys file: " + keysFile);
    console.writeln("");
+
+   // Load signing keys (this is how the official CodeSign does it)
+   var keys;
+   try {
+      keys = Security.loadSigningKeysFile(keysFile, password);
+      if (!keys.valid) {
+         console.criticalln("Error: Invalid signing keys");
+         return;
+      }
+      console.noteln("Loaded keys for developer: " + keys.developerId);
+   } catch (e) {
+      console.criticalln("Error loading keys: " + e.message);
+      return;
+   }
 
    var succeeded = 0;
    var failed = 0;
 
-   for (var i = 0; i < args.files.length; i++) {
-      var filePath = args.files[i].trim();
-
+   // Sign JS files
+   console.writeln("");
+   console.writeln("Signing JavaScript files:");
+   for (var i = 0; i < PROJECT_SCRIPTS.length; i++) {
+      var filePath = PROJECT_SCRIPTS[i];
       if (!File.exists(filePath)) {
          console.warningln("  File not found: " + filePath);
          failed++;
          continue;
       }
-
-      console.writeln("Signing: " + File.extractName(filePath));
-
-      if (signFile(args.keys, args.pass, filePath)) {
+      if (signScriptFile(keys, filePath)) {
          succeeded++;
       } else {
          failed++;
       }
    }
+
+   // Sign XRI files
+   console.writeln("");
+   console.writeln("Signing XML files:");
+   for (var i = 0; i < XRI_FILES.length; i++) {
+      var filePath = XRI_FILES[i];
+      if (!File.exists(filePath)) {
+         console.warningln("  File not found: " + filePath);
+         failed++;
+         continue;
+      }
+      if (signXRIFile(keys, filePath)) {
+         succeeded++;
+      } else {
+         failed++;
+      }
+   }
+
+   // Securely clear keys
+   keys.publicKey.secureFill();
+   keys.privateKey.secureFill();
 
    console.writeln("");
    console.writeln("===========================================");
