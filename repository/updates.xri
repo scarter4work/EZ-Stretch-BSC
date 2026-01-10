@@ -9,11 +9,17 @@
       <package fileName="LuptonRGB_v1.0.14.zip" sha1="e4def4e08963b3b379221b32c2d8728be83168ae" type="script" releaseDate="20251230">
          <title>Lupton RGB Stretch</title>
          <description>
-            <p><b>Lupton RGB Stretch v1.0.14</b></p>
+            <p>
+               <b>Lupton RGB Stretch v1.0.14</b>
+            </p>
             <p>Color-preserving arcsinh stretch based on Lupton et al. (2004) PASP 116:133</p>
-            <p><b>Changes in v1.0.14:</b></p>
+            <p>
+               <b>Changes in v1.0.14:</b>
+            </p>
             <p>- Moved to EZ Stretch BSC menu</p>
-            <p><b>Features:</b></p>
+            <p>
+               <b>Features:</b>
+            </p>
             <p>- Arcsinh stretch with configurable alpha and Q parameters</p>
             <p>- Color-preserving clipping (prevents star color blowout)</p>
             <p>- Real-time preview with Before/Split/After modes</p>
@@ -23,11 +29,17 @@
       <package fileName="RNC-ColorStretch_v1.0.10.zip" sha1="266726653a520ae74ff5f769e6d7de6da9c7595c" type="script" releaseDate="20251230">
          <title>RNC-ColorStretch</title>
          <description>
-            <p><b>RNC-ColorStretch v1.0.10</b></p>
-            <p>Advanced image stretching with active color recovery based on Roger N. Clark's algorithm.</p>
-            <p><b>Changes in v1.0.10:</b></p>
+            <p>
+               <b>RNC-ColorStretch v1.0.10</b>
+            </p>
+            <p>Advanced image stretching with active color recovery based on Roger N. Clark&apos;s algorithm.</p>
+            <p>
+               <b>Changes in v1.0.10:</b>
+            </p>
             <p>- Moved to EZ Stretch BSC menu</p>
-            <p><b>Features:</b></p>
+            <p>
+               <b>Features:</b>
+            </p>
             <p>- Power stretch with configurable root power (1-599)</p>
             <p>- Two-pass stretch option for finer control</p>
             <p>- Automatic sky level detection and subtraction</p>
@@ -38,11 +50,17 @@
       <package fileName="PhotometricStretch_v1.0.22.zip" sha1="4ad6412736cc6cae28f98422c1b369186a5ffc02" type="script" releaseDate="20251230">
          <title>Photometric Stretch Engine</title>
          <description>
-            <p><b>Photometric Stretch Engine v1.0.22</b></p>
+            <p>
+               <b>Photometric Stretch Engine v1.0.22</b>
+            </p>
             <p>Physics-based RGB stretch with automatic sensor/filter detection from FITS metadata.</p>
-            <p><b>Changes in v1.0.22:</b></p>
+            <p>
+               <b>Changes in v1.0.22:</b>
+            </p>
             <p>- Moved to EZ Stretch BSC menu</p>
-            <p><b>Features:</b></p>
+            <p>
+               <b>Features:</b>
+            </p>
             <p>- Automatic hardware detection from FITS headers</p>
             <p>- Physics-based RGB weights from QE x filter curves</p>
             <p>- Lupton asinh stretch preserving color ratios</p>
@@ -53,14 +71,20 @@
       <package fileName="EZStretch_v1.0.1.zip" sha1="b2b3dbe843c6927c035f7eb925498199fb00bdaf" type="script" releaseDate="20260110">
          <title>EZ Stretch - Unified Suite</title>
          <description>
-            <p><b>EZ Stretch v1.0.1</b></p>
+            <p>
+               <b>EZ Stretch v1.0.1</b>
+            </p>
             <p>Unified stretch suite combining all three algorithms in a single interface.</p>
-            <p><b>Changes in v1.0.1:</b></p>
+            <p>
+               <b>Changes in v1.0.1:</b>
+            </p>
             <p>- Larger default dialog size (1100x750)</p>
             <p>- Resizable dialog with adjustable left panel</p>
             <p>- Zoom controls: Fit, 25%, 50%, 100%, 200%</p>
             <p>- Pan support when zoomed (click and drag)</p>
-            <p><b>Features:</b></p>
+            <p>
+               <b>Features:</b>
+            </p>
             <p>- Lupton RGB: Color-preserving asinh stretch (Lupton et al. 2004)</p>
             <p>- RNC-ColorStretch: Power stretch with color recovery (Roger Clark)</p>
             <p>- PhotometricStretch: Physics-based stretch with QE weighting</p>
@@ -70,3 +94,4 @@
       </package>
    </platform>
 </xri>
+<Signature developerId="scarter4work" timestamp="2026-01-10T18:11:58.896Z" encoding="Base64">lHXItNbu0RR9ux0Dn4uewcUMKLLz3Np+BR4V0lc23RGScOhSjjgJPHooIkL4wZmGRwBb3E9HQZXS2CGQHgQECA==</Signature>
