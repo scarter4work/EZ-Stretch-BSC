@@ -31,7 +31,7 @@
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 #define TITLE   "EZ Stretch"
 
 "use strict";
@@ -491,13 +491,15 @@ function UnifiedPreviewControl(parent) {
    this.sourceWindow = null;
    this.previewMode = 0;  // 0: After, 1: Before, 2: Split
    this.splitPosition = 50;
-   this.zoomLevel = 0;    // 0=fit, 1=100%, 2=200%, 3=400%, 4=50%, 5=25%
-   this.scale = 1.0;
+   this.zoomFit = true;   // true = fit to window, false = use zoomScale
+   this.zoomScale = 1.0;  // actual zoom scale when not fitting
+   this.scale = 1.0;      // current effective scale
    this.scrollX = 0;
    this.scrollY = 0;
    this.dragging = false;
    this.dragStartX = 0;
    this.dragStartY = 0;
+   this.onZoomChanged = null;  // callback when zoom changes
 
    var self = this;
 
@@ -578,6 +580,16 @@ function UnifiedPreviewControl(parent) {
       }
    };
 
+   // Mouse wheel zoom
+   this.scrollbox.viewport.onMouseWheel = function(x, y, delta, modifiers) {
+      var zoomFactor = 1.25;
+      if (delta > 0) {
+         self.zoomIn();
+      } else if (delta < 0) {
+         self.zoomOut();
+      }
+   };
+
    this.sizer = new VerticalSizer;
    this.sizer.add(this.scrollbox);
    this.setScaledMinSize(350, 280);
@@ -587,21 +599,42 @@ function UnifiedPreviewControl(parent) {
       this.regenerate();
    };
 
-   this.setZoom = function(level) {
-      this.zoomLevel = level;
+   // Zoom in by a factor
+   this.zoomIn = function() {
+      if (this.zoomFit) {
+         // Start from current fit scale
+         this.zoomScale = this.scale * 1.25;
+         this.zoomFit = false;
+      } else {
+         this.zoomScale = Math.min(8.0, this.zoomScale * 1.25);
+      }
       this.regenerate();
+      if (this.onZoomChanged) this.onZoomChanged();
    };
 
-   this.getZoomScale = function() {
-      // 0=fit, 1=100%, 2=200%, 3=400%, 4=50%, 5=25%
-      switch (this.zoomLevel) {
-         case 1: return 1.0;
-         case 2: return 2.0;
-         case 3: return 4.0;
-         case 4: return 0.5;
-         case 5: return 0.25;
-         default: return 0; // 0 means fit
+   // Zoom out by a factor
+   this.zoomOut = function() {
+      if (this.zoomFit) {
+         // Start from current fit scale
+         this.zoomScale = this.scale / 1.25;
+         this.zoomFit = false;
+      } else {
+         this.zoomScale = Math.max(0.1, this.zoomScale / 1.25);
       }
+      this.regenerate();
+      if (this.onZoomChanged) this.onZoomChanged();
+   };
+
+   // Fit to window
+   this.zoomToFit = function() {
+      this.zoomFit = true;
+      this.regenerate();
+      if (this.onZoomChanged) this.onZoomChanged();
+   };
+
+   // Get current zoom percentage for display
+   this.getZoomPercent = function() {
+      return Math.round(this.scale * 100);
    };
 
    this.updatePreview = function() {
@@ -628,14 +661,13 @@ function UnifiedPreviewControl(parent) {
       var imgWidth = image.width;
       var imgHeight = image.height;
 
-      var zoomScale = this.getZoomScale();
-      if (zoomScale === 0) {
+      if (this.zoomFit) {
          // Fit to viewport
          var scaleX = (vpWidth - 10) / imgWidth;
          var scaleY = (vpHeight - 10) / imgHeight;
          this.scale = Math.min(scaleX, scaleY);
       } else {
-         this.scale = zoomScale;
+         this.scale = this.zoomScale;
       }
 
       var outWidth = Math.max(1, Math.round(imgWidth * this.scale));
@@ -1168,63 +1200,42 @@ function EZStretchDialog() {
    // Zoom Controls
    // =========================================================================
 
-   this.zoomLabel = new Label(this);
-   this.zoomLabel.text = "Zoom:";
-   this.zoomLabel.textAlignment = TextAlign_Left | TextAlign_VertCenter;
+   this.zoomOutButton = new ToolButton(this);
+   this.zoomOutButton.icon = this.scaledResource(":/icons/zoom-out.png");
+   this.zoomOutButton.setScaledFixedSize(24, 24);
+   this.zoomOutButton.toolTip = "Zoom out (or use mouse wheel)";
+   this.zoomOutButton.onClick = function() {
+      dialog.previewControl.zoomOut();
+   };
 
-   this.zoomFitButton = new PushButton(this);
-   this.zoomFitButton.text = "[Fit]";
-   this.zoomFitButton.setFixedWidth(40);
-   this.zoomFitButton.toolTip = "Fit image to preview area";
+   this.zoomFitButton = new ToolButton(this);
+   this.zoomFitButton.icon = this.scaledResource(":/icons/zoom-fit-optimal.png");
+   this.zoomFitButton.setScaledFixedSize(24, 24);
+   this.zoomFitButton.toolTip = "Fit to window";
    this.zoomFitButton.onClick = function() {
-      dialog.previewControl.setZoom(0);
-      dialog.updateZoomButtons();
+      dialog.previewControl.zoomToFit();
    };
 
-   this.zoom25Button = new PushButton(this);
-   this.zoom25Button.text = "25%";
-   this.zoom25Button.setFixedWidth(40);
-   this.zoom25Button.toolTip = "25% zoom";
-   this.zoom25Button.onClick = function() {
-      dialog.previewControl.setZoom(5);
-      dialog.updateZoomButtons();
+   this.zoomInButton = new ToolButton(this);
+   this.zoomInButton.icon = this.scaledResource(":/icons/zoom-in.png");
+   this.zoomInButton.setScaledFixedSize(24, 24);
+   this.zoomInButton.toolTip = "Zoom in (or use mouse wheel)";
+   this.zoomInButton.onClick = function() {
+      dialog.previewControl.zoomIn();
    };
 
-   this.zoom50Button = new PushButton(this);
-   this.zoom50Button.text = "50%";
-   this.zoom50Button.setFixedWidth(40);
-   this.zoom50Button.toolTip = "50% zoom";
-   this.zoom50Button.onClick = function() {
-      dialog.previewControl.setZoom(4);
-      dialog.updateZoomButtons();
-   };
-
-   this.zoom100Button = new PushButton(this);
-   this.zoom100Button.text = "100%";
-   this.zoom100Button.setFixedWidth(45);
-   this.zoom100Button.toolTip = "100% zoom (1:1 pixels)";
-   this.zoom100Button.onClick = function() {
-      dialog.previewControl.setZoom(1);
-      dialog.updateZoomButtons();
-   };
-
-   this.zoom200Button = new PushButton(this);
-   this.zoom200Button.text = "200%";
-   this.zoom200Button.setFixedWidth(45);
-   this.zoom200Button.toolTip = "200% zoom";
-   this.zoom200Button.onClick = function() {
-      dialog.previewControl.setZoom(2);
-      dialog.updateZoomButtons();
-   };
+   this.zoomLabel = new Label(this);
+   this.zoomLabel.text = "Fit";
+   this.zoomLabel.textAlignment = TextAlign_Center | TextAlign_VertCenter;
+   this.zoomLabel.setFixedWidth(50);
 
    var zoomSizer = new HorizontalSizer;
    zoomSizer.spacing = 4;
-   zoomSizer.add(this.zoomLabel);
+   zoomSizer.add(this.zoomOutButton);
    zoomSizer.add(this.zoomFitButton);
-   zoomSizer.add(this.zoom25Button);
-   zoomSizer.add(this.zoom50Button);
-   zoomSizer.add(this.zoom100Button);
-   zoomSizer.add(this.zoom200Button);
+   zoomSizer.add(this.zoomInButton);
+   zoomSizer.addSpacing(8);
+   zoomSizer.add(this.zoomLabel);
    zoomSizer.addStretch();
 
    // =========================================================================
@@ -1322,13 +1333,12 @@ function EZStretchDialog() {
       this.afterButton.text = (mode === 0) ? "[After]" : "After";
    };
 
-   this.updateZoomButtons = function() {
-      var level = this.previewControl.zoomLevel;
-      this.zoomFitButton.text = (level === 0) ? "[Fit]" : "Fit";
-      this.zoom25Button.text = (level === 5) ? "[25%]" : "25%";
-      this.zoom50Button.text = (level === 4) ? "[50%]" : "50%";
-      this.zoom100Button.text = (level === 1) ? "[100%]" : "100%";
-      this.zoom200Button.text = (level === 2) ? "[200%]" : "200%";
+   this.updateZoomLabel = function() {
+      if (this.previewControl.zoomFit) {
+         this.zoomLabel.text = "Fit";
+      } else {
+         this.zoomLabel.text = this.previewControl.getZoomPercent() + "%";
+      }
    };
 
    this.schedulePreviewUpdate = function() {
@@ -1418,7 +1428,15 @@ function EZStretchDialog() {
    if (this.targetWindow) {
       this.previewControl.sourceWindow = this.targetWindow;
    }
+
+   // Setup zoom change callback
+   var self = this;
+   this.previewControl.onZoomChanged = function() {
+      self.updateZoomLabel();
+   };
+
    this.updatePreviewButtons();
+   this.updateZoomLabel();
    this.schedulePreviewUpdate();
 }
 
