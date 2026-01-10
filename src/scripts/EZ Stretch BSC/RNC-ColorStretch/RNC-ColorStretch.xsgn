@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 PixInsight XML Code Signature Format - XSGN version 1.0
-Created with PixInsight software - https://pixinsight.com/
+Created with pi_codesign.py - https://pixinsight.com/
 -->
 <xsgn version="1.0" xmlns="http://www.pixinsight.com/xsgn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.pixinsight.com/xsgn http://pixinsight.com/xsgn/xsgn-1.0.xsd">
-   <CreationTime>2026-01-10T21:06:41.949Z</CreationTime>
+   <CreationTime>2026-01-10T21:25:49.515Z</CreationTime>
    <Signature version="1.0" scriptId="RNC-ColorStretch" developerId="scarter4work">
-      <Timestamp>2026-01-10T21:06:41.949Z</Timestamp>
-      <CodeSignature encoding="Base64">7KZwsQpHJi86Az2jkH7/794/vlk+iyIpppzFy76YcwfGUwUjB6uV602qZ3vWh5lSBHmhvmdP1Y/5hBHv1SZzBw==</CodeSignature>
+      <Timestamp>2026-01-10T21:25:49.515Z</Timestamp>
+      <CodeSignature encoding="Base64">/zZLgoTitqF0WJUhpK0mhoXGkVsfNSTd+Y0NxEiwdN+9YvXTkveVLTzTHOZE6D9kDHqW3LvEFPLsTTQMhbCBBw==</CodeSignature>
    </Signature>
 </xsgn>
