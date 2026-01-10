@@ -30,7 +30,7 @@
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 #define TITLE   "EZ Stretch"
 
 "use strict";
@@ -490,8 +490,13 @@ function UnifiedPreviewControl(parent) {
    this.sourceWindow = null;
    this.previewMode = 0;  // 0: After, 1: Before, 2: Split
    this.splitPosition = 50;
-   this.zoom = 0;
+   this.zoomLevel = 0;    // 0=fit, 1=100%, 2=200%, 3=400%, 4=50%, 5=25%
    this.scale = 1.0;
+   this.scrollX = 0;
+   this.scrollY = 0;
+   this.dragging = false;
+   this.dragStartX = 0;
+   this.dragStartY = 0;
 
    var self = this;
 
@@ -544,6 +549,34 @@ function UnifiedPreviewControl(parent) {
       self.regenerate();
    };
 
+   // Mouse drag for panning when zoomed
+   this.scrollbox.viewport.onMousePress = function(x, y, button, modifiers) {
+      if (button === MouseButton_Left) {
+         self.dragging = true;
+         self.dragStartX = x;
+         self.dragStartY = y;
+         this.cursor = new Cursor(StdCursor_ClosedHand);
+      }
+   };
+
+   this.scrollbox.viewport.onMouseRelease = function(x, y, button, modifiers) {
+      if (button === MouseButton_Left) {
+         self.dragging = false;
+         this.cursor = new Cursor(StdCursor_OpenHand);
+      }
+   };
+
+   this.scrollbox.viewport.onMouseMove = function(x, y, modifiers) {
+      if (self.dragging) {
+         var dx = self.dragStartX - x;
+         var dy = self.dragStartY - y;
+         self.scrollbox.horizontalScrollPosition += dx;
+         self.scrollbox.verticalScrollPosition += dy;
+         self.dragStartX = x;
+         self.dragStartY = y;
+      }
+   };
+
    this.sizer = new VerticalSizer;
    this.sizer.add(this.scrollbox);
    this.setScaledMinSize(350, 280);
@@ -551,6 +584,23 @@ function UnifiedPreviewControl(parent) {
    this.setAlgorithm = function(alg) {
       this.algorithm = alg;
       this.regenerate();
+   };
+
+   this.setZoom = function(level) {
+      this.zoomLevel = level;
+      this.regenerate();
+   };
+
+   this.getZoomScale = function() {
+      // 0=fit, 1=100%, 2=200%, 3=400%, 4=50%, 5=25%
+      switch (this.zoomLevel) {
+         case 1: return 1.0;
+         case 2: return 2.0;
+         case 3: return 4.0;
+         case 4: return 0.5;
+         case 5: return 0.25;
+         default: return 0; // 0 means fit
+      }
    };
 
    this.updatePreview = function() {
@@ -577,9 +627,15 @@ function UnifiedPreviewControl(parent) {
       var imgWidth = image.width;
       var imgHeight = image.height;
 
-      var scaleX = (vpWidth - 10) / imgWidth;
-      var scaleY = (vpHeight - 10) / imgHeight;
-      this.scale = Math.min(scaleX, scaleY);
+      var zoomScale = this.getZoomScale();
+      if (zoomScale === 0) {
+         // Fit to viewport
+         var scaleX = (vpWidth - 10) / imgWidth;
+         var scaleY = (vpHeight - 10) / imgHeight;
+         this.scale = Math.min(scaleX, scaleY);
+      } else {
+         this.scale = zoomScale;
+      }
 
       var outWidth = Math.max(1, Math.round(imgWidth * this.scale));
       var outHeight = Math.max(1, Math.round(imgHeight * this.scale));
@@ -589,6 +645,13 @@ function UnifiedPreviewControl(parent) {
       if (this.scaledImage) {
          this.scrollbox.maxHorizontalScrollPosition = Math.max(0, this.scaledImage.width - vpWidth);
          this.scrollbox.maxVerticalScrollPosition = Math.max(0, this.scaledImage.height - vpHeight);
+      }
+
+      // Set cursor for pan capability
+      if (this.scale > 0 && (outWidth > vpWidth || outHeight > vpHeight)) {
+         this.scrollbox.viewport.cursor = new Cursor(StdCursor_OpenHand);
+      } else {
+         this.scrollbox.viewport.cursor = new Cursor(StdCursor_Arrow);
       }
 
       this.scrollbox.viewport.update();
@@ -675,8 +738,7 @@ function EZStretchDialog() {
    this.photoEngine = new PhotometricEngine();
 
    this.windowTitle = TITLE + " v" + VERSION;
-   this.minWidth = 900;
-   this.minHeight = 600;
+   this.userResizable = true;
 
    // Throttling
    this.lastPreviewTime = 0;
@@ -1102,11 +1164,74 @@ function EZStretchDialog() {
    previewModeSizer.addStretch();
 
    // =========================================================================
+   // Zoom Controls
+   // =========================================================================
+
+   this.zoomLabel = new Label(this);
+   this.zoomLabel.text = "Zoom:";
+   this.zoomLabel.textAlignment = TextAlign_Left | TextAlign_VertCenter;
+
+   this.zoomFitButton = new PushButton(this);
+   this.zoomFitButton.text = "[Fit]";
+   this.zoomFitButton.setFixedWidth(40);
+   this.zoomFitButton.toolTip = "Fit image to preview area";
+   this.zoomFitButton.onClick = function() {
+      dialog.previewControl.setZoom(0);
+      dialog.updateZoomButtons();
+   };
+
+   this.zoom25Button = new PushButton(this);
+   this.zoom25Button.text = "25%";
+   this.zoom25Button.setFixedWidth(40);
+   this.zoom25Button.toolTip = "25% zoom";
+   this.zoom25Button.onClick = function() {
+      dialog.previewControl.setZoom(5);
+      dialog.updateZoomButtons();
+   };
+
+   this.zoom50Button = new PushButton(this);
+   this.zoom50Button.text = "50%";
+   this.zoom50Button.setFixedWidth(40);
+   this.zoom50Button.toolTip = "50% zoom";
+   this.zoom50Button.onClick = function() {
+      dialog.previewControl.setZoom(4);
+      dialog.updateZoomButtons();
+   };
+
+   this.zoom100Button = new PushButton(this);
+   this.zoom100Button.text = "100%";
+   this.zoom100Button.setFixedWidth(45);
+   this.zoom100Button.toolTip = "100% zoom (1:1 pixels)";
+   this.zoom100Button.onClick = function() {
+      dialog.previewControl.setZoom(1);
+      dialog.updateZoomButtons();
+   };
+
+   this.zoom200Button = new PushButton(this);
+   this.zoom200Button.text = "200%";
+   this.zoom200Button.setFixedWidth(45);
+   this.zoom200Button.toolTip = "200% zoom";
+   this.zoom200Button.onClick = function() {
+      dialog.previewControl.setZoom(2);
+      dialog.updateZoomButtons();
+   };
+
+   var zoomSizer = new HorizontalSizer;
+   zoomSizer.spacing = 4;
+   zoomSizer.add(this.zoomLabel);
+   zoomSizer.add(this.zoomFitButton);
+   zoomSizer.add(this.zoom25Button);
+   zoomSizer.add(this.zoom50Button);
+   zoomSizer.add(this.zoom100Button);
+   zoomSizer.add(this.zoom200Button);
+   zoomSizer.addStretch();
+
+   // =========================================================================
    // Preview Control
    // =========================================================================
 
    this.previewControl = new UnifiedPreviewControl(this);
-   this.previewControl.setMinSize(400, 300);
+   this.previewControl.setMinSize(500, 400);
    this.previewControl.previewMode = 2; // Split by default
 
    this.previewGroup = new GroupBox(this);
@@ -1115,6 +1240,7 @@ function EZStretchDialog() {
    this.previewGroup.sizer.margin = 6;
    this.previewGroup.sizer.spacing = 6;
    this.previewGroup.sizer.add(previewModeSizer);
+   this.previewGroup.sizer.add(zoomSizer);
    this.previewGroup.sizer.add(this.previewControl, 100);
 
    // =========================================================================
@@ -1153,7 +1279,8 @@ function EZStretchDialog() {
    // =========================================================================
 
    var leftPanel = new Control(this);
-   leftPanel.setFixedWidth(320);
+   leftPanel.setMinWidth(300);
+   leftPanel.setMaxWidth(450);
    leftPanel.sizer = new VerticalSizer;
    leftPanel.sizer.margin = 6;
    leftPanel.sizer.spacing = 8;
@@ -1165,12 +1292,16 @@ function EZStretchDialog() {
    leftPanel.sizer.add(buttonSizer);
 
    var mainSizer = new HorizontalSizer;
+   mainSizer.spacing = 8;
    mainSizer.add(leftPanel);
    mainSizer.add(this.previewGroup, 100);
 
    this.sizer = new VerticalSizer;
-   this.sizer.margin = 6;
+   this.sizer.margin = 8;
    this.sizer.add(mainSizer, 100);
+
+   // Set initial dialog size
+   this.resize(1100, 750);
 
    // =========================================================================
    // Helper Methods
@@ -1188,6 +1319,15 @@ function EZStretchDialog() {
       this.beforeButton.text = (mode === 1) ? "[Before]" : "Before";
       this.splitButton.text = (mode === 2) ? "[Split]" : "Split";
       this.afterButton.text = (mode === 0) ? "[After]" : "After";
+   };
+
+   this.updateZoomButtons = function() {
+      var level = this.previewControl.zoomLevel;
+      this.zoomFitButton.text = (level === 0) ? "[Fit]" : "Fit";
+      this.zoom25Button.text = (level === 5) ? "[25%]" : "25%";
+      this.zoom50Button.text = (level === 4) ? "[50%]" : "50%";
+      this.zoom100Button.text = (level === 1) ? "[100%]" : "100%";
+      this.zoom200Button.text = (level === 2) ? "[200%]" : "200%";
    };
 
    this.schedulePreviewUpdate = function() {
