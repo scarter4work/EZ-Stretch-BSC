@@ -6,7 +6,7 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="LuptonRGB_v1.0.14.zip" sha1="5e470ad52f17a6625774ed663a82a84b9fc3a5ae" type="script" releaseDate="20251230">
+      <package fileName="LuptonRGB_v1.0.14.zip" sha1="e4def4e08963b3b379221b32c2d8728be83168ae" type="script" releaseDate="20251230">
          <title>Lupton RGB Stretch</title>
          <description>
             <p><b>Lupton RGB Stretch v1.0.14</b></p>
@@ -20,7 +20,7 @@
             <p>- Saturation boost post-processing</p>
          </description>
       </package>
-      <package fileName="RNC-ColorStretch_v1.0.10.zip" sha1="37b9851aaabe8b1b7d2eaa209e8e5b6e2669c022" type="script" releaseDate="20251230">
+      <package fileName="RNC-ColorStretch_v1.0.10.zip" sha1="266726653a520ae74ff5f769e6d7de6da9c7595c" type="script" releaseDate="20251230">
          <title>RNC-ColorStretch</title>
          <description>
             <p><b>RNC-ColorStretch v1.0.10</b></p>
@@ -35,7 +35,7 @@
             <p>- Four S-curve options for additional contrast</p>
          </description>
       </package>
-      <package fileName="PhotometricStretch_v1.0.22.zip" sha1="d5998958ebeecd8bea3e76ba25356bd0c15c095f" type="script" releaseDate="20251230">
+      <package fileName="PhotometricStretch_v1.0.22.zip" sha1="4ad6412736cc6cae28f98422c1b369186a5ffc02" type="script" releaseDate="20251230">
          <title>Photometric Stretch Engine</title>
          <description>
             <p><b>Photometric Stretch Engine v1.0.22</b></p>
@@ -50,7 +50,7 @@
             <p>- Supports 24+ cameras, 8 sensors, 20+ filters</p>
          </description>
       </package>
-      <package fileName="EZStretch_v1.0.1.zip" sha1="8055dbf7528a34a310850edd49668ea70ca8a68b" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.1.zip" sha1="b2b3dbe843c6927c035f7eb925498199fb00bdaf" type="script" releaseDate="20260110">
          <title>EZ Stretch - Unified Suite</title>
          <description>
             <p><b>EZ Stretch v1.0.1</b></p>
