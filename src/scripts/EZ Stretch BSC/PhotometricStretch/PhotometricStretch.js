@@ -37,7 +37,7 @@
 #include "lib/LuptonStretch.js"
 #include "lib/UIComponents.js"
 
-#define VERSION "1.0.22"
+#define VERSION "1.0.23"
 #define TITLE "Photometric Stretch Engine"
 
 // Enable automatic garbage collection

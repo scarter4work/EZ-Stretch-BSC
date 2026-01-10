@@ -23,7 +23,7 @@
    <br/>\
    Copyright &copy; 2025. Released under GPL License.
 
-#define VERSION "1.0.10"
+#define VERSION "1.0.11"
 #define TITLE "RNC-ColorStretch"
 
 "use strict";

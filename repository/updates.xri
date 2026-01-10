@@ -26,17 +26,18 @@
             <p>- Saturation boost post-processing</p>
          </description>
       </package>
-      <package fileName="RNC-ColorStretch_v1.0.10.zip" sha1="266726653a520ae74ff5f769e6d7de6da9c7595c" type="script" releaseDate="20251230">
+      <package fileName="RNC-ColorStretch_v1.0.11.zip" sha1="c7ce2d7239e5260c91b9ebd4a81691060a5e0faa" type="script" releaseDate="20260110">
          <title>RNC-ColorStretch</title>
          <description>
             <p>
-               <b>RNC-ColorStretch v1.0.10</b>
+               <b>RNC-ColorStretch v1.0.11</b>
             </p>
             <p>Advanced image stretching with active color recovery based on Roger N. Clark&apos;s algorithm.</p>
             <p>
-               <b>Changes in v1.0.10:</b>
+               <b>Changes in v1.0.11:</b>
             </p>
-            <p>- Moved to EZ Stretch BSC menu</p>
+            <p>- Add PixInsight version check (requires 1.8.0+)</p>
+            <p>- Enable automatic garbage collection</p>
             <p>
                <b>Features:</b>
             </p>
@@ -47,17 +48,18 @@
             <p>- Four S-curve options for additional contrast</p>
          </description>
       </package>
-      <package fileName="PhotometricStretch_v1.0.22.zip" sha1="4ad6412736cc6cae28f98422c1b369186a5ffc02" type="script" releaseDate="20251230">
+      <package fileName="PhotometricStretch_v1.0.23.zip" sha1="d739c60c84dbee4bad6db85b0576d79d3d5ce760" type="script" releaseDate="20260110">
          <title>Photometric Stretch Engine</title>
          <description>
             <p>
-               <b>Photometric Stretch Engine v1.0.22</b>
+               <b>Photometric Stretch Engine v1.0.23</b>
             </p>
             <p>Physics-based RGB stretch with automatic sensor/filter detection from FITS metadata.</p>
             <p>
-               <b>Changes in v1.0.22:</b>
+               <b>Changes in v1.0.23:</b>
             </p>
-            <p>- Moved to EZ Stretch BSC menu</p>
+            <p>- Add PixInsight version check (requires 1.8.0+)</p>
+            <p>- Enable automatic garbage collection</p>
             <p>
                <b>Features:</b>
             </p>
@@ -68,20 +70,17 @@
             <p>- Supports 24+ cameras, 8 sensors, 20+ filters</p>
          </description>
       </package>
-      <package fileName="EZStretch_v1.0.1.zip" sha1="b2b3dbe843c6927c035f7eb925498199fb00bdaf" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.2.zip" sha1="455b08d030f5dffafdcb43da1f66ffd8f677a969" type="script" releaseDate="20260110">
          <title>EZ Stretch - Unified Suite</title>
          <description>
             <p>
-               <b>EZ Stretch v1.0.1</b>
+               <b>EZ Stretch v1.0.2</b>
             </p>
             <p>Unified stretch suite combining all three algorithms in a single interface.</p>
             <p>
-               <b>Changes in v1.0.1:</b>
+               <b>Changes in v1.0.2:</b>
             </p>
-            <p>- Larger default dialog size (1100x750)</p>
-            <p>- Resizable dialog with adjustable left panel</p>
-            <p>- Zoom controls: Fit, 25%, 50%, 100%, 200%</p>
-            <p>- Pan support when zoomed (click and drag)</p>
+            <p>- Mouse wheel zoom in preview panel</p>
             <p>
                <b>Features:</b>
             </p>
@@ -94,4 +93,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-10T21:25:49.515Z" encoding="Base64">BQG0JNVlMT+lqOL3Sqq9k9nwx/R/LcsSZm/TQA8RnUKVD7CmaDL33Sa1ySEdFCrb+6O3LRtKRqizrGlYdJiLCw==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-10T21:31:43.511Z" encoding="Base64">iu8mf4QAdWtlo6yMTZY31YZdJD4qmZW0zmu0nKxBwowEnywzRlAUEMbgMdRDiiyU+teLmSiNOOicIZb6tefEDg==</Signature>
