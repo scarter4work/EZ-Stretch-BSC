@@ -39,11 +39,8 @@ function getPassword() {
    // Method 2: Read from temp file
    if (File.exists(PASS_FILE)) {
       try {
-         var f = new File();
-         f.openForReading(PASS_FILE);
-         var pass = f.read(DataType_ByteArray, f.size);
-         f.close();
-         return pass.toString().trim();
+         var pass = File.readTextFile(PASS_FILE);
+         return pass.trim();
       } catch (e) {
          console.warningln("Error reading password file: " + e.message);
       }
