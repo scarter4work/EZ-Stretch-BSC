@@ -50,5 +50,19 @@
             <p>- Supports 24+ cameras, 8 sensors, 20+ filters</p>
          </description>
       </package>
+      <package fileName="EZStretch_v1.0.0.zip" sha1="f8171e2819dde4f5a0ab2d7c4121b9dcc9dbd389" type="script" releaseDate="20260110">
+         <title>EZ Stretch - Unified Suite</title>
+         <description>
+            <p><b>EZ Stretch v1.0.0</b></p>
+            <p>Unified stretch suite combining all three algorithms in a single interface.</p>
+            <p><b>Features:</b></p>
+            <p>- Lupton RGB: Color-preserving asinh stretch (Lupton et al. 2004)</p>
+            <p>- RNC-ColorStretch: Power stretch with color recovery (Roger Clark)</p>
+            <p>- PhotometricStretch: Physics-based stretch with QE weighting</p>
+            <p>- Single interface with algorithm selector</p>
+            <p>- Real-time preview with Before/Split/After modes</p>
+            <p>- Shared preview panel across all algorithms</p>
+         </description>
+      </package>
    </platform>
 </xri>
