@@ -6,7 +6,7 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="EZStretch_v1.0.8.zip" sha1="a569b9c32b887b85be2f775ce58ed20aa41b63d1" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.8.zip" sha1="ed9b19b2bede9dd09ca84697188be285dc0895bc" type="script" releaseDate="20260110">
          <title>EZ Stretch</title>
          <description>
             <p>
@@ -23,7 +23,7 @@
             <p>- Mouse wheel zoom in preview</p>
          </description>
       </package>
-      <package fileName="EZDonutRepair_v1.0.0.zip" sha1="148e81b6b83458d718e801a25127e6c3cf5d803e" type="script" releaseDate="20260110">
+      <package fileName="EZDonutRepair_v1.0.0.zip" sha1="7516aa5c868b423366e7e07e5eb8b28ac671cb24" type="script" releaseDate="20260110">
          <title>EZ Donut Repair</title>
          <description>
             <p>
@@ -42,4 +42,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T03:21:03.294Z" encoding="Base64">W6OpVs+M/SfPjTdSIc4/HjH9s40beFY4fz4jAVSmgFT3DtRFhR7sNbsPYw/buCEyz9wZkNCPgf+lUojTiOSeDg==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T03:30:01.706Z" encoding="Base64">SLBdbKc0bVrrZkAvPC7YqZ3hfnZm22L4tvS9tBag8QdVZcVqraZ0X+fBGDcYDi3dpPDvYXmKTILjbXyAJHE6AA==</Signature>

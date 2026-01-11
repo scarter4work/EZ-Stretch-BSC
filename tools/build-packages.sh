@@ -19,19 +19,21 @@ scripts = "$SCRIPTS"
 repo = "$REPO"
 
 # EZ Stretch BSC scripts
+# Zip paths must match PixInsight installation structure: src/scripts/<folder>/
+install_base = "src/scripts/EZ Stretch BSC"
 packages = {
     "EZStretch": {
         "version": "1.0.8",
         "files": [
-            ("EZStretch.js", "EZStretch.js"),
-            ("EZStretch.xsgn", "EZStretch.xsgn"),
+            ("EZStretch.js", f"{install_base}/EZStretch.js"),
+            ("EZStretch.xsgn", f"{install_base}/EZStretch.xsgn"),
         ]
     },
     "EZDonutRepair": {
         "version": "1.0.0",
         "files": [
-            ("EZDonutRepair.js", "EZDonutRepair.js"),
-            ("EZDonutRepair.xsgn", "EZDonutRepair.xsgn"),
+            ("EZDonutRepair.js", f"{install_base}/EZDonutRepair.js"),
+            ("EZDonutRepair.xsgn", f"{install_base}/EZDonutRepair.xsgn"),
         ]
     },
 }
