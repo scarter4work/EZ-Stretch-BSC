@@ -23,14 +23,14 @@ repo = "$REPO"
 install_base = "src/scripts/EZ Stretch BSC"
 packages = {
     "EZStretch": {
-        "version": "1.0.8",
+        "version": "1.0.9",
         "files": [
             ("EZStretch.js", f"{install_base}/EZStretch.js"),
             ("EZStretch.xsgn", f"{install_base}/EZStretch.xsgn"),
         ]
     },
     "EZDonutRepair": {
-        "version": "1.0.0",
+        "version": "1.0.1",
         "files": [
             ("EZDonutRepair.js", f"{install_base}/EZDonutRepair.js"),
             ("EZDonutRepair.xsgn", f"{install_base}/EZDonutRepair.xsgn"),
