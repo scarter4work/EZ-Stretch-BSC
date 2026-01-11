@@ -13,15 +13,12 @@ REPO="$PROJECT_DIR/repository"
 echo "Building repository packages..."
 
 python3 << EOF
-import zipfile, hashlib, os
+import zipfile, hashlib, os, glob
 
 scripts = "$SCRIPTS"
 repo = "$REPO"
 
-# Package definitions: (name, version, files_or_dir)
-# If files_or_dir is a list, use explicit files
-# If files_or_dir is None, include entire subdirectory
-
+# Only EZ Stretch - the unified script
 packages = {
     "EZStretch": {
         "version": "1.0.5",
@@ -29,18 +26,6 @@ packages = {
             ("EZStretch.js", "EZStretch.js"),
             ("EZStretch.xsgn", "EZStretch.xsgn"),
         ]
-    },
-    "LuptonRGB": {
-        "version": "1.0.14",
-        "subdir": "LuptonRGB"
-    },
-    "RNC-ColorStretch": {
-        "version": "1.0.11",
-        "subdir": "RNC-ColorStretch"
-    },
-    "PhotometricStretch": {
-        "version": "1.0.23",
-        "subdir": "PhotometricStretch"
     },
 }
 
@@ -51,25 +36,14 @@ for name, config in packages.items():
     zipname = f"{repo}/{name}_v{version}.zip"
 
     # Remove old versions of this package
-    import glob
     for old in glob.glob(f"{repo}/{name}_v*.zip"):
         os.remove(old)
 
     with zipfile.ZipFile(zipname, 'w', zipfile.ZIP_DEFLATED) as zf:
-        if "files" in config:
-            # Explicit file list
-            for src, dst in config["files"]:
-                srcpath = f"{scripts}/{src}"
-                if os.path.exists(srcpath):
-                    zf.write(srcpath, dst)
-        elif "subdir" in config:
-            # Include entire subdirectory
-            base = f"{scripts}/{config['subdir']}"
-            for root, dirs, filenames in os.walk(base):
-                for f in filenames:
-                    src = os.path.join(root, f)
-                    dst = os.path.relpath(src, base)
-                    zf.write(src, dst)
+        for src, dst in config["files"]:
+            srcpath = f"{scripts}/{src}"
+            if os.path.exists(srcpath):
+                zf.write(srcpath, dst)
 
     with open(zipname, 'rb') as f:
         sha1 = hashlib.sha1(f.read()).hexdigest()
@@ -78,7 +52,7 @@ for name, config in packages.items():
     print(f"{name}_v{version}.zip: {sha1}")
 
 print()
-print("Update repository/updates.xri with these SHA1 hashes:")
+print("Update repository/updates.xri with this SHA1 hash:")
 for name, version, sha1 in results:
     print(f'  {name}: sha1="{sha1}"')
 EOF

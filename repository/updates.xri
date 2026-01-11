@@ -1,98 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xri version="1.0" xmlns="http://www.pixinsight.com/xri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.pixinsight.com/xri http://pixinsight.com/xri/xri-1.0.xsd">
    <description>
-      <p>EZ Stretch BSC - PixInsight Stretching Scripts Collection</p>
-      <p>A collection of advanced image stretching scripts for astrophotography.</p>
+      <p>EZ Stretch BSC - PixInsight Stretching Scripts</p>
+      <p>Advanced image stretching for astrophotography.</p>
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="LuptonRGB_v1.0.14.zip" sha1="ba6fdf48042fa43141d4ef8ba05a3ce66374f5c2" type="script" releaseDate="20251230">
-         <title>Lupton RGB Stretch</title>
-         <description>
-            <p>
-               <b>Lupton RGB Stretch v1.0.14</b>
-            </p>
-            <p>Color-preserving arcsinh stretch based on Lupton et al. (2004) PASP 116:133</p>
-            <p>
-               <b>Changes in v1.0.14:</b>
-            </p>
-            <p>- Moved to EZ Stretch BSC menu</p>
-            <p>
-               <b>Features:</b>
-            </p>
-            <p>- Arcsinh stretch with configurable alpha and Q parameters</p>
-            <p>- Color-preserving clipping (prevents star color blowout)</p>
-            <p>- Real-time preview with Before/Split/After modes</p>
-            <p>- Saturation boost post-processing</p>
-         </description>
-      </package>
-      <package fileName="RNC-ColorStretch_v1.0.11.zip" sha1="ecf21811605a4ff87a14ce67402d41125bdb38c7" type="script" releaseDate="20260110">
-         <title>RNC-ColorStretch</title>
-         <description>
-            <p>
-               <b>RNC-ColorStretch v1.0.11</b>
-            </p>
-            <p>Advanced image stretching with active color recovery based on Roger N. Clark&apos;s algorithm.</p>
-            <p>
-               <b>Changes in v1.0.11:</b>
-            </p>
-            <p>- Add PixInsight version check (requires 1.8.0+)</p>
-            <p>- Enable automatic garbage collection</p>
-            <p>
-               <b>Features:</b>
-            </p>
-            <p>- Power stretch with configurable root power (1-599)</p>
-            <p>- Two-pass stretch option for finer control</p>
-            <p>- Automatic sky level detection and subtraction</p>
-            <p>- Color recovery - restores color lost during stretching</p>
-            <p>- Four S-curve options for additional contrast</p>
-         </description>
-      </package>
-      <package fileName="PhotometricStretch_v1.0.23.zip" sha1="f2773bfc05844f09ccc9002b46646f42b1190325" type="script" releaseDate="20260110">
-         <title>Photometric Stretch Engine</title>
-         <description>
-            <p>
-               <b>Photometric Stretch Engine v1.0.23</b>
-            </p>
-            <p>Physics-based RGB stretch with automatic sensor/filter detection from FITS metadata.</p>
-            <p>
-               <b>Changes in v1.0.23:</b>
-            </p>
-            <p>- Add PixInsight version check (requires 1.8.0+)</p>
-            <p>- Enable automatic garbage collection</p>
-            <p>
-               <b>Features:</b>
-            </p>
-            <p>- Automatic hardware detection from FITS headers</p>
-            <p>- Physics-based RGB weights from QE x filter curves</p>
-            <p>- Lupton asinh stretch preserving color ratios</p>
-            <p>- Real-time preview with before/after/split comparison</p>
-            <p>- Supports 24+ cameras, 8 sensors, 20+ filters</p>
-         </description>
-      </package>
-      <package fileName="EZStretch_v1.0.5.zip" sha1="04ae5b54c32b1689abd7e59207a0b23aa94da531" type="script" releaseDate="20260110">
-         <title>EZ Stretch - Unified Suite</title>
+      <package fileName="EZStretch_v1.0.5.zip" sha1="03ac292ce10f682ac7f98932d4d318f3a649401f" type="script" releaseDate="20260110">
+         <title>EZ Stretch</title>
          <description>
             <p>
                <b>EZ Stretch v1.0.5</b>
             </p>
-            <p>Unified stretch suite combining all three algorithms in a single interface.</p>
-            <p>
-               <b>Changes in v1.0.5:</b>
-            </p>
-            <p>- Before/Split/After and zoom controls on same line</p>
-            <p>- Large initial dialog size (1600x1000)</p>
-            <p>- Fixed dialog resizing when switching algorithms</p>
+            <p>Unified stretch suite combining three algorithms in a single interface.</p>
             <p>
                <b>Features:</b>
             </p>
             <p>- Lupton RGB: Color-preserving asinh stretch (Lupton et al. 2004)</p>
             <p>- RNC-ColorStretch: Power stretch with color recovery (Roger Clark)</p>
             <p>- PhotometricStretch: Physics-based stretch with QE weighting</p>
-            <p>- Single interface with algorithm selector</p>
             <p>- Real-time preview with Before/Split/After modes</p>
+            <p>- Mouse wheel zoom in preview</p>
          </description>
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T02:07:11.290Z" encoding="Base64">3GfENMdapqkITbtbBkbGLOwJ3RBhYHqpp7MAZvw5s++uq2CQQeUvuiDkyFnNS+7k8roPC8e8VOOX7yuI4zC0DA==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T02:25:56.099Z" encoding="Base64">1iGDgr0FQ0UID6PKut4Fu6BNUbGTN7tI+5y7g41LoiV9cUnNYfUYO1nUCQxffJUB0ISlCyUaJQW3bC9aaym/CA==</Signature>
