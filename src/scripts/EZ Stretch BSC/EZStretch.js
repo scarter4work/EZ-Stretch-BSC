@@ -32,7 +32,7 @@
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.7"
+#define VERSION "1.0.8"
 #define TITLE   "EZ Stretch"
 
 var jsAutoGC = true;
@@ -580,8 +580,7 @@ function UnifiedPreviewControl(parent) {
    };
 
    // Mouse wheel zoom
-   this.scrollbox.viewport.onMouseWheel = function(x, y, delta, modifiers) {
-      var zoomFactor = 1.25;
+   this.scrollbox.viewport.onMouseWheel = function(x, y, delta, buttonState, modifiers) {
       if (delta > 0) {
          self.zoomIn();
       } else if (delta < 0) {

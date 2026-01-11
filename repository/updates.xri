@@ -6,17 +6,17 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="EZStretch_v1.0.7.zip" sha1="2165e2063bc05eb97b25a319406efefe0730da30" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.8.zip" sha1="e9413161e559671a5a393c3ae35823d881d969fa" type="script" releaseDate="20260110">
          <title>EZ Stretch</title>
          <description>
             <p>
-               <b>EZ Stretch v1.0.7</b>
+               <b>EZ Stretch v1.0.8</b>
             </p>
             <p>Unified stretch suite combining three algorithms in a single interface.</p>
             <p>
-               <b>Changes in v1.0.7:</b>
+               <b>Changes in v1.0.8:</b>
             </p>
-            <p>- Remove spurious &quot;use strict&quot; warning</p>
+            <p>- Fix mouse wheel zoom (correct event handler signature)</p>
             <p>
                <b>Features:</b>
             </p>
@@ -29,4 +29,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T02:42:52.617Z" encoding="Base64">svoHZqOCtUF7kTWlnlyZDktUKosYt/NjIeRTtp+l81vQyBzPKK0JI8sCk2+4woIK9bQo3o6vbnBvb8A3tyXVCQ==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T02:44:40.162Z" encoding="Base64">z4NIG6w6ttLr5uaRTZ8jh0j5G+vnE2dv7c1ygqob3gMORjr7Prj2ejhxNnKu98vyFFqIxPkxastdbiqQZ26YBQ==</Signature>
