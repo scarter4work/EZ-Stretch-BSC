@@ -29,13 +29,8 @@ else
     exit 1
 fi
 
-for script in EZStretch LuptonRGB RNC-ColorStretch PhotometricStretch; do
-    if [ "$script" = "EZStretch" ]; then
-        xsgn="$PROJECT_DIR/src/scripts/EZ Stretch BSC/$script.xsgn"
-    else
-        xsgn="$PROJECT_DIR/src/scripts/EZ Stretch BSC/$script/$script.xsgn"
-    fi
-
+for script in EZStretch EZDonutRepair; do
+    xsgn="$PROJECT_DIR/src/scripts/EZ Stretch BSC/$script.xsgn"
     if [ -f "$xsgn" ]; then
         ts=$(grep -oP 'Timestamp>\K[^<]+' "$xsgn" 2>/dev/null || echo "unknown")
         echo "  $script.xsgn: $ts"

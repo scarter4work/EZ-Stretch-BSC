@@ -15,12 +15,10 @@
 var PROJECT_DIR = "/home/scarter4work/projects/EZ-suite-bsc/EZ-Stretch-BSC";
 var DEFAULT_KEYS = "/home/scarter4work/projects/keys/scarter4work_keys.xssk";
 
-// Files to sign
+// Files to sign - add new scripts here
 var PROJECT_SCRIPTS = [
    PROJECT_DIR + "/src/scripts/EZ Stretch BSC/EZStretch.js",
-   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/LuptonRGB/LuptonRGB.js",
-   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/RNC-ColorStretch/RNC-ColorStretch.js",
-   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/PhotometricStretch/PhotometricStretch.js"
+   PROJECT_DIR + "/src/scripts/EZ Stretch BSC/EZDonutRepair.js"
 ];
 
 var XRI_FILES = [
