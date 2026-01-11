@@ -30,7 +30,7 @@ packages = {
         ]
     },
     "EZDonutRepair": {
-        "version": "1.0.1",
+        "version": "1.0.2",
         "files": [
             ("EZDonutRepair.js", f"{install_base}/EZDonutRepair.js"),
             ("EZDonutRepair.xsgn", f"{install_base}/EZDonutRepair.xsgn"),

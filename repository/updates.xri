@@ -6,7 +6,7 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="EZStretch_v1.0.9.zip" sha1="98b8070edc0407893f449099a9e22f3cf01ffe03" type="script" releaseDate="20260111">
+      <package fileName="EZStretch_v1.0.9.zip" sha1="6570a198bbf9a0cdb77156b6f133bdc8f3a98871" type="script" releaseDate="20260111">
          <title>EZ Stretch</title>
          <description>
             <p>
@@ -23,11 +23,11 @@
             <p>- Mouse wheel zoom in preview</p>
          </description>
       </package>
-      <package fileName="EZDonutRepair_v1.0.1.zip" sha1="e32e2f2bb5a25d099a9b9bc250f5b4633ff74f09" type="script" releaseDate="20260111">
+      <package fileName="EZDonutRepair_v1.0.2.zip" sha1="011125e6aa44f1d62b4a99608b2a97f9d44eca73" type="script" releaseDate="20260111">
          <title>EZ Donut Repair</title>
          <description>
             <p>
-               <b>EZ Donut Repair v1.0.1</b>
+               <b>EZ Donut Repair v1.0.2</b>
             </p>
             <p>Repairs circular dust donuts in both color and mono images.</p>
             <p>
@@ -42,4 +42,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T03:35:38.834Z" encoding="Base64">9lGikUNVbxTrYpQnJiD4GCnuUr73HuUmfrWIHfs2sn341dCxNudOxajES/Fz3W6WH6XveBy7qo1wAyaM50ShBA==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T03:45:17.758Z" encoding="Base64">B8+iWFMjo9CbWjaYdyX0Z7tZ54+tjhwrkOiI9hF4PKn8SypMtH3xRZOa9bVkwDnrx1dQlnTYfpE1Y1pe54gZCA==</Signature>

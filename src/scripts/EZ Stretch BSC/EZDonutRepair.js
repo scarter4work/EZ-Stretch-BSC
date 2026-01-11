@@ -32,7 +32,7 @@
 #include <pjsr/ButtonCodes.jsh>
 
 #define TITLE "EZ Donut Repair"
-#define VERSION "1.0.1"
+#define VERSION "1.0.2"
 
 var jsAutoGC = true;
 
@@ -88,8 +88,10 @@ function ScrollControl(parent) {
    this.dragging = false;
    this.dragOrigin = new Point(0);
    this.isDrawing = false;
+   this.isMoving = false;
    this.isTransforming = false;
    this.currentShape = [];
+   this.originalShape = [];
    this.shapes = [];
    this.shapeTypes = [];
    this.activeShapeIndex = 0;
@@ -185,7 +187,7 @@ function ScrollControl(parent) {
          self.isDrawing = true;
          self.dragging = false;
          self.currentShape = [[self.startX, self.startY], [self.startX, self.startY]];
-      } else if (modifiers === 2) { // Ctrl key - move
+      } else if (modifiers === 2 && self.shapes.length > 0 && self.shapes[self.activeShapeIndex]) { // Ctrl key - move
          self.startX = adjustedX;
          self.startY = adjustedY;
          self.isMoving = true;
@@ -194,7 +196,7 @@ function ScrollControl(parent) {
          for (let i = 0; i < self.shapes[self.activeShapeIndex].length; i++) {
             self.originalShape.push(self.shapes[self.activeShapeIndex][i].slice());
          }
-      } else if (modifiers === 4) { // Alt key - transform
+      } else if (modifiers === 4 && self.shapes.length > 0 && self.shapes[self.activeShapeIndex]) { // Alt key - transform
          self.startX = adjustedX;
          self.startY = adjustedY;
          self.isTransforming = true;
@@ -363,7 +365,6 @@ function ScrollControl(parent) {
          }
       }
       g.end();
-      gc();
    };
 
    this.initScrollBars();
@@ -689,17 +690,22 @@ function DonutRepairDialog() {
       let xCenter = (x0 + x1) / 2;
       let yCenter = (y0 + y1) / 2;
 
-      let RING_MIN_FACTOR = 1.15;
-      let RING_MAX_FACTOR = 1.25;
-      let RING_BOUND_FACTOR = 1.4;
-      let CIRCLE_SCALE_FACTOR = 0.8;
-      let BLEND_RING_MIN_FACTOR = 0.75;
-      let BLEND_RING_MAX_FACTOR = 1.25;
+      // Background ring is OUTSIDE the drawn ellipse (1.15-1.25x radius)
+      let BG_RING_MIN = 1.15;
+      let BG_RING_MAX = 1.25;
+      // Donut shadow ring is the dark part of the donut (0.85-1.0x radius)
+      let DONUT_RING_MIN = 0.85;
+      let DONUT_RING_MAX = 1.0;
+      // Bounds for sampling
+      let BOUND_FACTOR = 1.4;
+      // Blend region for smooth edges
+      let BLEND_MIN = 0.9;
+      let BLEND_MAX = 1.1;
 
-      let lowerBoundX = xCenter - RING_BOUND_FACTOR * xRadius;
-      let upperBoundX = xCenter + RING_BOUND_FACTOR * xRadius;
-      let lowerBoundY = yCenter - RING_BOUND_FACTOR * yRadius;
-      let upperBoundY = yCenter + RING_BOUND_FACTOR * yRadius;
+      let lowerBoundX = xCenter - BOUND_FACTOR * xRadius;
+      let upperBoundX = xCenter + BOUND_FACTOR * xRadius;
+      let lowerBoundY = yCenter - BOUND_FACTOR * yRadius;
+      let upperBoundY = yCenter + BOUND_FACTOR * yRadius;
 
       if (lowerBoundX < 0) lowerBoundX = 0;
       if (lowerBoundY < 0) lowerBoundY = 0;
@@ -711,6 +717,13 @@ function DonutRepairDialog() {
          let dx = px - cx;
          let dy = py - cy;
          return (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) <= 1;
+      }
+
+      // Helper: get ellipse distance factor (0 at center, 1 at edge)
+      function ellipseFactor(px, py, cx, cy, rx, ry) {
+         let dx = px - cx;
+         let dy = py - cy;
+         return Math.sqrt((dx * dx) / (rx * rx) + (dy * dy) / (ry * ry));
       }
 
       // Helper: median of array
@@ -730,85 +743,68 @@ function DonutRepairDialog() {
       for (let ch = 0; ch < numChannels; ch++) {
          console.noteln("Processing channel " + ch);
 
-         // Get ring median
-         let ringMedianList = [];
+         // Get BACKGROUND median (outside the donut)
+         let bgList = [];
          for (let x = Math.floor(lowerBoundX); x < upperBoundX; x++) {
             for (let y = Math.floor(lowerBoundY); y < upperBoundY; y++) {
-               let inOuter = inEllipse(x, y, xCenter, yCenter, xRadius * RING_MAX_FACTOR, yRadius * RING_MAX_FACTOR);
-               let inInner = inEllipse(x, y, xCenter, yCenter, xRadius * RING_MIN_FACTOR, yRadius * RING_MIN_FACTOR);
+               let inOuter = inEllipse(x, y, xCenter, yCenter, xRadius * BG_RING_MAX, yRadius * BG_RING_MAX);
+               let inInner = inEllipse(x, y, xCenter, yCenter, xRadius * BG_RING_MIN, yRadius * BG_RING_MIN);
                if (inOuter && !inInner) {
-                  ringMedianList.push(selectedImage.sample(x, y, ch));
+                  bgList.push(selectedImage.sample(x, y, ch));
                }
             }
          }
-         let medianOfRing = medianOfList(ringMedianList);
+         let bgMedian = medianOfList(bgList);
 
-         // Get circle median
-         let circleMedianList = [];
+         // Get DONUT SHADOW median (the dark ring of the donut itself)
+         let donutList = [];
          for (let x = Math.floor(lowerBoundX); x < upperBoundX; x++) {
             for (let y = Math.floor(lowerBoundY); y < upperBoundY; y++) {
-               if (inEllipse(x, y, xCenter, yCenter, xRadius * CIRCLE_SCALE_FACTOR, yRadius * CIRCLE_SCALE_FACTOR)) {
-                  circleMedianList.push(selectedImage.sample(x, y, ch));
+               let inOuter = inEllipse(x, y, xCenter, yCenter, xRadius * DONUT_RING_MAX, yRadius * DONUT_RING_MAX);
+               let inInner = inEllipse(x, y, xCenter, yCenter, xRadius * DONUT_RING_MIN, yRadius * DONUT_RING_MIN);
+               if (inOuter && !inInner) {
+                  donutList.push(selectedImage.sample(x, y, ch));
                }
             }
          }
-         let medianOfCircle = medianOfList(circleMedianList);
+         let donutMedian = medianOfList(donutList);
 
-         if (medianOfCircle === 0) {
-            console.warningln("Channel " + ch + ": median of circle is 0, skipping correction");
+         if (donutMedian === 0) {
+            console.warningln("Channel " + ch + ": donut median is 0, skipping");
             continue;
          }
 
-         let correctionFactor = medianOfRing / medianOfCircle;
-         console.noteln("Channel " + ch + ": ring median=" + medianOfRing.toFixed(6) +
-                        ", circle median=" + medianOfCircle.toFixed(6) +
+         // Correction factor to bring donut shadow UP to background level
+         let correctionFactor = bgMedian / donutMedian;
+         console.noteln("Channel " + ch + ": bg=" + bgMedian.toFixed(6) +
+                        ", donut=" + donutMedian.toFixed(6) +
                         ", correction=" + correctionFactor.toFixed(4));
 
-         // Apply correction to donut area
+         // Apply correction with radial falloff (more at edge, less at center)
          for (let x = Math.floor(lowerBoundX); x < upperBoundX; x++) {
             for (let y = Math.floor(lowerBoundY); y < upperBoundY; y++) {
                if (inEllipse(x, y, xCenter, yCenter, xRadius, yRadius)) {
                   let oldVal = selectedImage.sample(x, y, ch);
-                  let newVal = Math.min(1.0, oldVal * correctionFactor);
+                  // Radial factor: 0 at center, 1 at edge
+                  let radial = ellipseFactor(x, y, xCenter, yCenter, xRadius, yRadius);
+                  // Apply stronger correction at edge (where the dark ring is)
+                  let localCorrection = 1.0 + (correctionFactor - 1.0) * radial;
+                  let newVal = Math.min(1.0, Math.max(0, oldVal * localCorrection));
                   parameters.targetWindow.mainView.image.setSample(newVal, x, y, ch);
                }
             }
          }
 
-         // Blend edges
+         // Blend edges smoothly with background
          for (let x = Math.floor(lowerBoundX); x < upperBoundX; x++) {
             for (let y = Math.floor(lowerBoundY); y < upperBoundY; y++) {
-               let inOuter = inEllipse(x, y, xCenter, yCenter, xRadius * BLEND_RING_MAX_FACTOR, yRadius * BLEND_RING_MAX_FACTOR);
-               let inInner = inEllipse(x, y, xCenter, yCenter, xRadius * BLEND_RING_MIN_FACTOR, yRadius * BLEND_RING_MIN_FACTOR);
-
-               if (inOuter && !inInner) {
-                  let deltaX = x - xCenter;
-                  let deltaY = y - yCenter;
-                  let pixelAngle = Math.atan2(deltaY, deltaX);
-
-                  let xOuter = xCenter + xRadius * BLEND_RING_MAX_FACTOR * Math.cos(pixelAngle);
-                  let yOuter = yCenter + yRadius * BLEND_RING_MAX_FACTOR * Math.sin(pixelAngle);
-                  let xInner = xCenter + xRadius * BLEND_RING_MIN_FACTOR * Math.cos(pixelAngle);
-                  let yInner = yCenter + yRadius * BLEND_RING_MIN_FACTOR * Math.sin(pixelAngle);
-
-                  // Clamp to image bounds
-                  xOuter = Math.max(0, Math.min(selectedImage.width - 1, Math.round(xOuter)));
-                  yOuter = Math.max(0, Math.min(selectedImage.height - 1, Math.round(yOuter)));
-                  xInner = Math.max(0, Math.min(selectedImage.width - 1, Math.round(xInner)));
-                  yInner = Math.max(0, Math.min(selectedImage.height - 1, Math.round(yInner)));
-
-                  let innerVal = parameters.targetWindow.mainView.image.sample(xInner, yInner, ch);
-                  let outerVal = selectedImage.sample(xOuter, yOuter, ch);
-
-                  let ringThickness = Math.sqrt((xInner - xOuter) * (xInner - xOuter) +
-                                                (yInner - yOuter) * (yInner - yOuter));
-                  let pointToOuter = Math.sqrt((x - xOuter) * (x - xOuter) +
-                                               (y - yOuter) * (y - yOuter));
-
-                  let ratio = ringThickness > 0 ? pointToOuter / ringThickness : 0.5;
-                  ratio = Math.max(0, Math.min(1, ratio));
-
-                  let blendedVal = ratio * innerVal + (1 - ratio) * outerVal;
+               let factor = ellipseFactor(x, y, xCenter, yCenter, xRadius, yRadius);
+               if (factor >= BLEND_MIN && factor <= BLEND_MAX) {
+                  let correctedVal = parameters.targetWindow.mainView.image.sample(x, y, ch);
+                  let originalVal = selectedImage.sample(x, y, ch);
+                  // Blend: 0 at BLEND_MIN (fully corrected), 1 at BLEND_MAX (fully original)
+                  let blendRatio = (factor - BLEND_MIN) / (BLEND_MAX - BLEND_MIN);
+                  let blendedVal = correctedVal * (1 - blendRatio) + originalVal * blendRatio;
                   parameters.targetWindow.mainView.image.setSample(blendedVal, x, y, ch);
                }
             }
