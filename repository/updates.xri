@@ -6,13 +6,17 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="EZStretch_v1.0.5.zip" sha1="03ac292ce10f682ac7f98932d4d318f3a649401f" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.6.zip" sha1="7a1dbe7c6d1cf3bcb5388b25f35e8722c62c5383" type="script" releaseDate="20260110">
          <title>EZ Stretch</title>
          <description>
             <p>
-               <b>EZ Stretch v1.0.5</b>
+               <b>EZ Stretch v1.0.6</b>
             </p>
             <p>Unified stretch suite combining three algorithms in a single interface.</p>
+            <p>
+               <b>Changes in v1.0.6:</b>
+            </p>
+            <p>- Fix MouseButton_Left undefined error</p>
             <p>
                <b>Features:</b>
             </p>
@@ -25,4 +29,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T02:25:56.099Z" encoding="Base64">1iGDgr0FQ0UID6PKut4Fu6BNUbGTN7tI+5y7g41LoiV9cUnNYfUYO1nUCQxffJUB0ISlCyUaJQW3bC9aaym/CA==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T02:36:47.542Z" encoding="Base64">m55WRvqrYaOKFLoVWqHTGY08/QIpCpJpNsL+M3iX1pBYD3JMXCQUAZYOfTLCrkFhZYDix/rxv7DJyFxNicAECg==</Signature>

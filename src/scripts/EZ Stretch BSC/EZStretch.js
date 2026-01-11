@@ -26,12 +26,13 @@
 #include <pjsr/SampleType.jsh>
 #include <pjsr/Color.jsh>
 #include <pjsr/ImageOp.jsh>
+#include <pjsr/ButtonCodes.jsh>
 
 #iflt __PI_VERSION__ 01.08.00
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.5"
+#define VERSION "1.0.6"
 #define TITLE   "EZ Stretch"
 
 "use strict";
