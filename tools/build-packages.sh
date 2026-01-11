@@ -21,7 +21,7 @@ repo = "$REPO"
 # Only EZ Stretch - the unified script
 packages = {
     "EZStretch": {
-        "version": "1.0.6",
+        "version": "1.0.7",
         "files": [
             ("EZStretch.js", "EZStretch.js"),
             ("EZStretch.xsgn", "EZStretch.xsgn"),

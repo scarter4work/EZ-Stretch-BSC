@@ -32,10 +32,8 @@
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.6"
+#define VERSION "1.0.7"
 #define TITLE   "EZ Stretch"
-
-"use strict";
 
 var jsAutoGC = true;
 
