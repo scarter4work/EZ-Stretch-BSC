@@ -77,19 +77,105 @@ def canonicalize_script(script_path: str) -> bytes:
     return content.encode('utf-8')
 
 
-def sign_data(private_key_bytes: bytes, data: bytes) -> bytes:
-    """Sign data with Ed25519 private key"""
-    # Ed25519 private key: 32 bytes (seed) or 64 bytes (seed + public key)
-    if len(private_key_bytes) == 64:
-        # Seed is first 32 bytes
-        seed = private_key_bytes[:32]
-    elif len(private_key_bytes) == 32:
-        seed = private_key_bytes
-    else:
-        raise ValueError(f"Invalid private key length: {len(private_key_bytes)}")
+def sign_data_expanded(scalar_bytes: bytes, prefix: bytes, public_key: bytes, message: bytes) -> bytes:
+    """
+    Sign data using Ed25519 with expanded key format.
 
-    private_key = Ed25519PrivateKey.from_private_bytes(seed)
-    return private_key.sign(data)
+    PixInsight stores keys in expanded format:
+    - scalar (32 bytes, clamped): the secret signing scalar
+    - prefix (32 bytes): used for deterministic nonce generation
+
+    Standard Ed25519 libraries expect seed format, but PixInsight exports
+    the already-expanded key (result of SHA512(seed) with clamping applied).
+    """
+    import hashlib
+
+    # Ed25519 curve parameters
+    p = 2**255 - 19  # Prime field
+    L = 2**252 + 27742317777372353535851937790883648493  # Order of base point
+    d = -121665 * pow(121666, -1, p) % p  # Curve parameter
+
+    def mod_inv(x, mod):
+        return pow(x, mod - 2, mod)
+
+    def point_add(P, Q):
+        if P is None: return Q
+        if Q is None: return P
+        x1, y1 = P
+        x2, y2 = Q
+        denom = d * x1 * x2 * y1 * y2
+        x3 = (x1*y2 + x2*y1) * mod_inv(1 + denom, p) % p
+        y3 = (y1*y2 + x1*x2) * mod_inv(1 - denom, p) % p
+        return (x3, y3)
+
+    def point_mul(n, P):
+        if n == 0: return None
+        Q = None
+        while n > 0:
+            if n & 1:
+                Q = point_add(Q, P)
+            P = point_add(P, P)
+            n >>= 1
+        return Q
+
+    def recover_x(y, sign):
+        x2 = (y*y - 1) * mod_inv(d*y*y + 1, p) % p
+        x = pow(x2, (p+3)//8, p)
+        if (x*x - x2) % p != 0:
+            x = x * pow(2, (p-1)//4, p) % p
+        if x % 2 != sign:
+            x = p - x
+        return x
+
+    # Base point B
+    By = 4 * mod_inv(5, p) % p
+    Bx = recover_x(By, 0)
+    B = (Bx, By)
+
+    def point_encode(P):
+        if P is None: return bytes(32)
+        x, y = P
+        return (y | ((x & 1) << 255)).to_bytes(32, 'little')
+
+    def int_from_bytes(b):
+        return int.from_bytes(b, 'little')
+
+    def sha512(data):
+        return hashlib.sha512(data).digest()
+
+    scalar = int_from_bytes(scalar_bytes)
+
+    # r = SHA512(prefix || message) mod L
+    r_hash = sha512(prefix + message)
+    r = int_from_bytes(r_hash) % L
+
+    # R = r * B
+    R_point = point_mul(r, B)
+    R = point_encode(R_point)
+
+    # k = SHA512(R || public_key || message) mod L
+    k_hash = sha512(R + public_key + message)
+    k = int_from_bytes(k_hash) % L
+
+    # s = (r + k * scalar) mod L
+    s = (r + k * scalar) % L
+    S = s.to_bytes(32, 'little')
+
+    return R + S
+
+
+def sign_data(keys: dict, data: bytes) -> bytes:
+    """Sign data with Ed25519 using PixInsight's expanded key format"""
+    private_key_bytes = keys['private_key']
+    public_key = keys['public_key']
+
+    if len(private_key_bytes) != 64:
+        raise ValueError(f"Invalid private key length: {len(private_key_bytes)}, expected 64 (expanded format)")
+
+    scalar_bytes = private_key_bytes[:32]
+    prefix = private_key_bytes[32:]
+
+    return sign_data_expanded(scalar_bytes, prefix, public_key, data)
 
 
 def sign_script(keys: dict, script_path: str, entitlements: list = None) -> str:
@@ -119,8 +205,8 @@ def sign_script(keys: dict, script_path: str, entitlements: list = None) -> str:
     full_message = b''.join(message_parts)
     message_hash = hashlib.sha512(full_message).digest()
 
-    # Sign the hash
-    signature = sign_data(keys['private_key'], message_hash)
+    # Sign the hash using expanded key format
+    signature = sign_data(keys, message_hash)
     signature_b64 = base64.b64encode(signature).decode('ascii')
 
     # Build XML output
@@ -169,8 +255,8 @@ def sign_xri(keys: dict, xri_path: str) -> bool:
     full_message = b''.join(message_parts)
     message_hash = hashlib.sha512(full_message).digest()
 
-    # Sign
-    signature = sign_data(keys['private_key'], message_hash)
+    # Sign using expanded key format
+    signature = sign_data(keys, message_hash)
     signature_b64 = base64.b64encode(signature).decode('ascii')
 
     # Build signature element (outside root, PixInsight style)
