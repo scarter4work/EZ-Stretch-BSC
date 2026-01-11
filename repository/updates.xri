@@ -6,7 +6,7 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="LuptonRGB_v1.0.14.zip" sha1="fe0baa01110bd2991a252ea86d63241cbc9bb165" type="script" releaseDate="20251230">
+      <package fileName="LuptonRGB_v1.0.14.zip" sha1="d4fca01209907890554d2cc62ff9228deef105a6" type="script" releaseDate="20251230">
          <title>Lupton RGB Stretch</title>
          <description>
             <p>
@@ -26,7 +26,7 @@
             <p>- Saturation boost post-processing</p>
          </description>
       </package>
-      <package fileName="RNC-ColorStretch_v1.0.11.zip" sha1="633c1eb825877626e8197ea68db28f6bc945d41e" type="script" releaseDate="20260110">
+      <package fileName="RNC-ColorStretch_v1.0.11.zip" sha1="60029eda46315dd8a921fcc9890e7b5c23546591" type="script" releaseDate="20260110">
          <title>RNC-ColorStretch</title>
          <description>
             <p>
@@ -48,7 +48,7 @@
             <p>- Four S-curve options for additional contrast</p>
          </description>
       </package>
-      <package fileName="PhotometricStretch_v1.0.23.zip" sha1="95fb89cf7a7a2d3fe5c073f0651705d9134d5c16" type="script" releaseDate="20260110">
+      <package fileName="PhotometricStretch_v1.0.23.zip" sha1="50d04c7eb0ba0c0d64b59dc71335328f0bf732dd" type="script" releaseDate="20260110">
          <title>Photometric Stretch Engine</title>
          <description>
             <p>
@@ -70,7 +70,7 @@
             <p>- Supports 24+ cameras, 8 sensors, 20+ filters</p>
          </description>
       </package>
-      <package fileName="EZStretch_v1.0.2.zip" sha1="be48f3e8d75d7321599ae43122d7a293399f2308" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.2.zip" sha1="c1d0b369a6762ba5515002de3979d6e5730a12bf" type="script" releaseDate="20260110">
          <title>EZ Stretch - Unified Suite</title>
          <description>
             <p>
@@ -93,4 +93,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T00:13:01.098Z" encoding="Base64">eeN9xK4sGcT6zojJzVCSJptZAvw2UGLJgcPy5ppG63rwUg45KEDXsgrTf8MducPP80/zPAzcizqrMw6cER73Bw==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T00:17:49.237Z" encoding="Base64">ru5Y+0Qy1emtOboTQv26yomv7oTkyrE0qGzjc5p2avsUrY1CKdl+tGhwsbk3atERISfcH+p5OXi//dAYNnmuCQ==</Signature>

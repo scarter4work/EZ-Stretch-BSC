@@ -201,12 +201,9 @@ def sign_script(keys: dict, script_path: str, entitlements: list = None) -> str:
         for e in entitlements:
             message_parts.append(e.encode('utf-8'))
 
-    # Hash the message with SHA-512
+    # Sign the raw message (Ed25519 handles hashing internally)
     full_message = b''.join(message_parts)
-    message_hash = hashlib.sha512(full_message).digest()
-
-    # Sign the hash using expanded key format
-    signature = sign_data(keys, message_hash)
+    signature = sign_data(keys, full_message)
     signature_b64 = base64.b64encode(signature).decode('ascii')
 
     # Build XML output
@@ -252,11 +249,9 @@ def sign_xri(keys: dict, xri_path: str) -> bool:
         content_clean.encode('utf-8'),
     ]
 
+    # Sign the raw message (Ed25519 handles hashing internally)
     full_message = b''.join(message_parts)
-    message_hash = hashlib.sha512(full_message).digest()
-
-    # Sign using expanded key format
-    signature = sign_data(keys, message_hash)
+    signature = sign_data(keys, full_message)
     signature_b64 = base64.b64encode(signature).decode('ascii')
 
     # Build signature element (outside root, PixInsight style)
