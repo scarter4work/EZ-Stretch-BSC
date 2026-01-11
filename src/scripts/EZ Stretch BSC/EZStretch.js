@@ -31,7 +31,7 @@
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.2"
+#define VERSION "1.0.4"
 #define TITLE   "EZ Stretch"
 
 "use strict";
@@ -1197,7 +1197,7 @@ function EZStretchDialog() {
    previewModeSizer.addStretch();
 
    // =========================================================================
-   // Zoom Controls
+   // Zoom Controls: [zoom-out] [Fit] [zoom-in]
    // =========================================================================
 
    this.zoomOutButton = new ToolButton(this);
@@ -1208,9 +1208,9 @@ function EZStretchDialog() {
       dialog.previewControl.zoomOut();
    };
 
-   this.zoomFitButton = new ToolButton(this);
-   this.zoomFitButton.icon = this.scaledResource(":/icons/zoom-fit-optimal.png");
-   this.zoomFitButton.setScaledFixedSize(24, 24);
+   this.zoomFitButton = new PushButton(this);
+   this.zoomFitButton.text = "Fit";
+   this.zoomFitButton.setFixedWidth(40);
    this.zoomFitButton.toolTip = "Fit to window";
    this.zoomFitButton.onClick = function() {
       dialog.previewControl.zoomToFit();
@@ -1224,19 +1224,12 @@ function EZStretchDialog() {
       dialog.previewControl.zoomIn();
    };
 
-   this.zoomLabel = new Label(this);
-   this.zoomLabel.text = "Fit";
-   this.zoomLabel.textAlignment = TextAlign_Center | TextAlign_VertCenter;
-   this.zoomLabel.setFixedWidth(50);
-
    var zoomSizer = new HorizontalSizer;
-   zoomSizer.spacing = 4;
+   zoomSizer.spacing = 2;
+   zoomSizer.addStretch();
    zoomSizer.add(this.zoomOutButton);
    zoomSizer.add(this.zoomFitButton);
    zoomSizer.add(this.zoomInButton);
-   zoomSizer.addSpacing(8);
-   zoomSizer.add(this.zoomLabel);
-   zoomSizer.addStretch();
 
    // =========================================================================
    // Preview Control
@@ -1312,8 +1305,8 @@ function EZStretchDialog() {
    this.sizer.margin = 8;
    this.sizer.add(mainSizer, 100);
 
-   // Set initial dialog size
-   this.resize(1100, 750);
+   // Set initial dialog size (larger for better preview)
+   this.resize(1600, 1000);
 
    // =========================================================================
    // Helper Methods
@@ -1323,7 +1316,7 @@ function EZStretchDialog() {
       this.luptonPanel.visible = (this.algorithm === Algorithm.LUPTON);
       this.rncPanel.visible = (this.algorithm === Algorithm.RNC);
       this.photoPanel.visible = (this.algorithm === Algorithm.PHOTOMETRIC);
-      this.adjustToContents();
+      // Don't call adjustToContents() - keep dialog size stable when switching algorithms
    };
 
    this.updatePreviewButtons = function() {
@@ -1333,11 +1326,11 @@ function EZStretchDialog() {
       this.afterButton.text = (mode === 0) ? "[After]" : "After";
    };
 
-   this.updateZoomLabel = function() {
+   this.updateZoomButton = function() {
       if (this.previewControl.zoomFit) {
-         this.zoomLabel.text = "Fit";
+         this.zoomFitButton.text = "Fit";
       } else {
-         this.zoomLabel.text = this.previewControl.getZoomPercent() + "%";
+         this.zoomFitButton.text = this.previewControl.getZoomPercent() + "%";
       }
    };
 
@@ -1432,11 +1425,11 @@ function EZStretchDialog() {
    // Setup zoom change callback
    var self = this;
    this.previewControl.onZoomChanged = function() {
-      self.updateZoomLabel();
+      self.updateZoomButton();
    };
 
    this.updatePreviewButtons();
-   this.updateZoomLabel();
+   this.updateZoomButton();
    this.schedulePreviewUpdate();
 }
 

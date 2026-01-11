@@ -70,17 +70,19 @@
             <p>- Supports 24+ cameras, 8 sensors, 20+ filters</p>
          </description>
       </package>
-      <package fileName="EZStretch_v1.0.2.zip" sha1="30d9daedd382e1affd833d9e5d5b94595a9cc11e" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.4.zip" sha1="16cb4c7cbc208f4f3c1457992fdf283ebf02175e" type="script" releaseDate="20260110">
          <title>EZ Stretch - Unified Suite</title>
          <description>
             <p>
-               <b>EZ Stretch v1.0.2</b>
+               <b>EZ Stretch v1.0.4</b>
             </p>
             <p>Unified stretch suite combining all three algorithms in a single interface.</p>
             <p>
-               <b>Changes in v1.0.2:</b>
+               <b>Changes in v1.0.4:</b>
             </p>
-            <p>- Mouse wheel zoom in preview panel</p>
+            <p>- Zoom controls positioned in upper right corner</p>
+            <p>- Even larger initial dialog size (1600x1000)</p>
+            <p>- Fixed dialog resizing when switching algorithms</p>
             <p>
                <b>Features:</b>
             </p>
@@ -93,4 +95,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T00:28:05.738Z" encoding="Base64">MwxN/42gUw1EcPSE4OaEiDGBk9w4D9z8rJBUW9IkK9yakBrMyMTgfJK4UOacZI7FmMJpseT+FDamdiQYGfBIAQ==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T01:03:20.027Z" encoding="Base64">Kx/CCq595sbuy3CTZvm4XhFc65ITyhmruPZQCLyKKFNGcFgGE+0J3pJIg+j6/3YsWj9uzovX3R96TNA2sLnqDg==</Signature>
