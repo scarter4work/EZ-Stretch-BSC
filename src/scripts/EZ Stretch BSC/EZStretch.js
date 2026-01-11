@@ -31,7 +31,7 @@
 #error This script requires PixInsight 1.8.0 or higher.
 #endif
 
-#define VERSION "1.0.4"
+#define VERSION "1.0.5"
 #define TITLE   "EZ Stretch"
 
 "use strict";
@@ -1189,13 +1189,6 @@ function EZStretchDialog() {
       dialog.schedulePreviewUpdate();
    };
 
-   var previewModeSizer = new HorizontalSizer;
-   previewModeSizer.spacing = 6;
-   previewModeSizer.add(this.beforeButton);
-   previewModeSizer.add(this.splitButton);
-   previewModeSizer.add(this.afterButton);
-   previewModeSizer.addStretch();
-
    // =========================================================================
    // Zoom Controls: [zoom-out] [Fit] [zoom-in]
    // =========================================================================
@@ -1224,12 +1217,18 @@ function EZStretchDialog() {
       dialog.previewControl.zoomIn();
    };
 
-   var zoomSizer = new HorizontalSizer;
-   zoomSizer.spacing = 2;
-   zoomSizer.addStretch();
-   zoomSizer.add(this.zoomOutButton);
-   zoomSizer.add(this.zoomFitButton);
-   zoomSizer.add(this.zoomInButton);
+   // Preview mode + zoom on same line: [Before][Split][After] ... [-][Fit][+]
+   var previewControlsSizer = new HorizontalSizer;
+   previewControlsSizer.spacing = 6;
+   previewControlsSizer.add(this.beforeButton);
+   previewControlsSizer.add(this.splitButton);
+   previewControlsSizer.add(this.afterButton);
+   previewControlsSizer.addStretch();
+   previewControlsSizer.add(this.zoomOutButton);
+   previewControlsSizer.addSpacing(2);
+   previewControlsSizer.add(this.zoomFitButton);
+   previewControlsSizer.addSpacing(2);
+   previewControlsSizer.add(this.zoomInButton);
 
    // =========================================================================
    // Preview Control
@@ -1244,8 +1243,7 @@ function EZStretchDialog() {
    this.previewGroup.sizer = new VerticalSizer;
    this.previewGroup.sizer.margin = 6;
    this.previewGroup.sizer.spacing = 6;
-   this.previewGroup.sizer.add(previewModeSizer);
-   this.previewGroup.sizer.add(zoomSizer);
+   this.previewGroup.sizer.add(previewControlsSizer);
    this.previewGroup.sizer.add(this.previewControl, 100);
 
    // =========================================================================

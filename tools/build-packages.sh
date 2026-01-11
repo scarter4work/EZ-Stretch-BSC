@@ -24,7 +24,7 @@ repo = "$REPO"
 
 packages = {
     "EZStretch": {
-        "version": "1.0.4",
+        "version": "1.0.5",
         "files": [
             ("EZStretch.js", "EZStretch.js"),
             ("EZStretch.xsgn", "EZStretch.xsgn"),
