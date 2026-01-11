@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xri version="1.0" xmlns="http://www.pixinsight.com/xri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.pixinsight.com/xri http://pixinsight.com/xri/xri-1.0.xsd">
    <description>
-      <p>EZ Stretch BSC - PixInsight Stretching Scripts</p>
-      <p>Advanced image stretching for astrophotography.</p>
+      <p>EZ Stretch BSC - PixInsight Scripts Suite</p>
+      <p>Image processing scripts for astrophotography.</p>
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="EZStretch_v1.0.8.zip" sha1="e9413161e559671a5a393c3ae35823d881d969fa" type="script" releaseDate="20260110">
+      <package fileName="EZStretch_v1.0.8.zip" sha1="a569b9c32b887b85be2f775ce58ed20aa41b63d1" type="script" releaseDate="20260110">
          <title>EZ Stretch</title>
          <description>
             <p>
                <b>EZ Stretch v1.0.8</b>
             </p>
             <p>Unified stretch suite combining three algorithms in a single interface.</p>
-            <p>
-               <b>Changes in v1.0.8:</b>
-            </p>
-            <p>- Fix mouse wheel zoom (correct event handler signature)</p>
             <p>
                <b>Features:</b>
             </p>
@@ -27,6 +23,23 @@
             <p>- Mouse wheel zoom in preview</p>
          </description>
       </package>
+      <package fileName="EZDonutRepair_v1.0.0.zip" sha1="148e81b6b83458d718e801a25127e6c3cf5d803e" type="script" releaseDate="20260110">
+         <title>EZ Donut Repair</title>
+         <description>
+            <p>
+               <b>EZ Donut Repair v1.0.0</b>
+            </p>
+            <p>Repairs circular dust donuts in both color and mono images.</p>
+            <p>
+               <b>Features:</b>
+            </p>
+            <p>- Supports RGB color images (processes each channel)</p>
+            <p>- Supports mono images</p>
+            <p>- Draw ellipse around donut to repair</p>
+            <p>- Move, rotate, resize shapes</p>
+            <p>- Based on DonutRepair by Chick Dee (CC BY-NC 4.0)</p>
+         </description>
+      </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T03:12:58.761Z" encoding="Base64">AEWpyXz2hsjiWmFNepKizhn3roL45QM78OnD7CnawV8V/mDzVudQjw/g49ef3TgL1dvUE2uPUKF0GP4MQiUQDQ==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T03:16:15.027Z" encoding="Base64">vljI6cZafZBv0E5mAE/qtFPbC1AbQ8Ic3SwBl2huv7Xrbog62AT6SjGYCwBx0YCtgFXIv4qzNQ3xyV+uerZyAA==</Signature>

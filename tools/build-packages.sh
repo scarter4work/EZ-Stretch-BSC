@@ -18,13 +18,20 @@ import zipfile, hashlib, os, glob
 scripts = "$SCRIPTS"
 repo = "$REPO"
 
-# Only EZ Stretch - the unified script
+# EZ Stretch BSC scripts
 packages = {
     "EZStretch": {
         "version": "1.0.8",
         "files": [
             ("EZStretch.js", "EZStretch.js"),
             ("EZStretch.xsgn", "EZStretch.xsgn"),
+        ]
+    },
+    "EZDonutRepair": {
+        "version": "1.0.0",
+        "files": [
+            ("EZDonutRepair.js", "EZDonutRepair.js"),
+            ("EZDonutRepair.xsgn", "EZDonutRepair.xsgn"),
         ]
     },
 }
