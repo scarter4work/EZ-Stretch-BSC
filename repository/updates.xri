@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xri version="1.0" xmlns="http://www.pixinsight.com/xri" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.pixinsight.com/xri http://pixinsight.com/xri/xri-1.0.xsd">
+<xri version="1.0">
    <description>
       <p>EZ Stretch BSC - PixInsight Scripts Suite</p>
       <p>Image processing scripts for astrophotography.</p>
@@ -42,4 +42,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-01-11T03:16:15.027Z" encoding="Base64">vljI6cZafZBv0E5mAE/qtFPbC1AbQ8Ic3SwBl2huv7Xrbog62AT6SjGYCwBx0YCtgFXIv4qzNQ3xyV+uerZyAA==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-01-11T03:21:03.294Z" encoding="Base64">W6OpVs+M/SfPjTdSIc4/HjH9s40beFY4fz4jAVSmgFT3DtRFhR7sNbsPYw/buCEyz9wZkNCPgf+lUojTiOSeDg==</Signature>
