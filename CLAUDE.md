@@ -34,24 +34,28 @@ Push directly to main without asking - this is a PixInsight plugin suite, not cr
 
 ## Release Process
 
-When making changes to a script, auto-increment the version:
+When making changes to a script:
 
 1. Update `#define VERSION` in the main .js file
-2. Create new zip in `repository/` containing the script files
-3. Calculate SHA1 of the zip file
+2. Sign scripts: `./tools/sign.sh` (runs PixInsight headless, needs password in /tmp/.pi_codesign_pass)
+3. Build packages: `./tools/build-packages.sh` (creates zips with signed scripts, outputs SHA1 hashes)
 4. Update `repository/updates.xri` with new version, SHA1, and changelog
-5. Commit and push
+5. Re-sign: `./tools/sign.sh` (signs the updated updates.xri)
+6. Install locally: `./tools/install-local.sh` (copies to ~/.PixInsight/src/scripts)
+7. Commit and push
 
-Python one-liner for zip + SHA1:
-```python
-python3 -c "
-import zipfile, hashlib
-with zipfile.ZipFile('repository/Script_vX.X.X.zip', 'w', zipfile.ZIP_DEFLATED) as zf:
-    zf.write('src/scripts/EZ Stretch BSC/Script/Script.js', 'Script.js')
-with open('repository/Script_vX.X.X.zip', 'rb') as f:
-    print(hashlib.sha1(f.read()).hexdigest())
-"
-```
+### Tools
+
+- `tools/sign.sh` - Signs all scripts and updates.xri using PixInsight headless mode (`-n=9 --automation-mode --force-exit`)
+- `tools/build-packages.sh` - Builds zip packages including .xsgn signature files
+- `tools/install-local.sh` - Installs to user's PixInsight directory (no sudo needed)
+- `tools/CLICodeSign.js` - PJSR script that performs actual signing via Security API
+
+### Signing Requirements
+
+- Password file: `/tmp/.pi_codesign_pass`
+- Keys file: `/home/scarter4work/projects/keys/scarter4work_keys.xssk`
+- PixInsight must be installed (but doesn't need to be running)
 
 ## PJSR-Specific Patterns
 
