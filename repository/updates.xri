@@ -4,6 +4,8 @@
       <p>EZ Stretch BSC - PixInsight Scripts Suite</p>
       <p>Image processing scripts for astrophotography.</p>
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
+      <p>
+         <b>MOVED:</b> These scripts now ship from the unified astro-pi repository. Please register https://raw.githubusercontent.com/scarter4work/astro-pi/main/repository/ for future updates.</p>
    </description>
    <platform os="all" arch="noarch" version="1.8.0:2.0.0">
       <package fileName="EZStretch_v1.0.9.zip" sha1="665b446d3e2f8267209355104c0b61737cbff2ce" type="script" releaseDate="20260604">
@@ -58,4 +60,4 @@
       </package>
    </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-06-04T20:00:02.403Z" encoding="Base64">D7kH53pe2rkyE+JZQByZT7SgcCsufjYonK7a2F6ePx/rQGFIyNR6lciNFHGrlGhNKVCkGiWG8A4/G/akf4U1Dw==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-06-08T22:13:58.694Z" encoding="Base64">O8qX4Ou4BD8kjVRan7K3WkLZv/KvLKoHy1oqsCvH2dTrODpYshlSj3G0Z1As1fREPAdERL1E4n59gJjJIA0SBA==</Signature>
