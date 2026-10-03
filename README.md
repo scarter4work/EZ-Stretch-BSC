@@ -1,3 +1,5 @@
+> **⚠️ MOVED (2026-10-03):** this repository is archived. It now lives in [scarter4work/astro-pi](https://github.com/scarter4work/astro-pi) under `scripts/ez-stretch/`.
+
 # EZ Stretch BSC
 
 A collection of PixInsight tools for astrophotography - stretching scripts and Bayesian stacking.
