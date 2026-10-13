@@ -6,58 +6,9 @@
       <p>Repository: https://github.com/scarter4work/EZ-Stretch-BSC</p>
       <p>
          <b>MOVED:</b> These scripts now ship from the unified astro-pi repository. Please register https://raw.githubusercontent.com/scarter4work/astro-pi/main/repository/ for future updates.</p>
+      <p>
+         <b>This repository no longer distributes packages.</b> Register https://raw.githubusercontent.com/scarter4work/astro-pi/main/repository/ to install and update.
+      </p>
    </description>
-   <platform os="all" arch="noarch" version="1.8.0:2.0.0">
-      <package fileName="EZStretch_v1.0.9.zip" sha1="665b446d3e2f8267209355104c0b61737cbff2ce" type="script" releaseDate="20260604">
-         <title>EZ Stretch</title>
-         <description>
-            <p>
-               <b>EZ Stretch v1.0.9</b>
-            </p>
-            <p>Unified stretch suite combining three algorithms in a single interface.</p>
-            <p>
-               <b>Features:</b>
-            </p>
-            <p>- Lupton RGB: Color-preserving asinh stretch (Lupton et al. 2004)</p>
-            <p>- RNC-ColorStretch: Power stretch with color recovery (Roger Clark)</p>
-            <p>- PhotometricStretch: Physics-based stretch with QE weighting</p>
-            <p>- Real-time preview with Before/Split/After modes</p>
-            <p>- Mouse wheel zoom in preview</p>
-         </description>
-      </package>
-      <package fileName="EZDonutRepair_v1.0.2.zip" sha1="6c847698da183f006d1ff0425765ec6fa57f8f3c" type="script" releaseDate="20260604">
-         <title>EZ Donut Repair</title>
-         <description>
-            <p>
-               <b>EZ Donut Repair v1.0.2</b>
-            </p>
-            <p>Repairs circular dust donuts in both color and mono images.</p>
-            <p>
-               <b>Features:</b>
-            </p>
-            <p>- Supports RGB color images (processes each channel)</p>
-            <p>- Supports mono images</p>
-            <p>- Draw ellipse around donut to repair</p>
-            <p>- Move, rotate, resize shapes</p>
-            <p>- Based on DonutRepair by Chick Dee (CC BY-NC 4.0)</p>
-         </description>
-      </package>
-      <package fileName="EZHazeKill_v1.0.0.zip" sha1="70b4fafd19a4a2bb39cf449f95017ad55dae7b2f" type="script" releaseDate="20260604">
-         <title>EZ Haze Kill</title>
-         <description>
-            <p>
-               <b>EZ Haze Kill v1.0.0</b>
-            </p>
-            <p>Detects and removes flat background haze left after gradient extraction.</p>
-            <p>
-               <b>Features:</b>
-            </p>
-            <p>- Measures each channel&apos;s background level and reports the color-cast spread</p>
-            <p>- Subtracts every channel to a common neutral target via PixelMath (undoable)</p>
-            <p>- Supports RGB color and mono images</p>
-            <p>- For moon-washed / light-polluted frames after GraXpert or DBE</p>
-         </description>
-      </package>
-   </platform>
 </xri>
-<Signature developerId="scarter4work" timestamp="2026-06-08T22:13:58.694Z" encoding="Base64">O8qX4Ou4BD8kjVRan7K3WkLZv/KvLKoHy1oqsCvH2dTrODpYshlSj3G0Z1As1fREPAdERL1E4n59gJjJIA0SBA==</Signature>
+<Signature developerId="scarter4work" timestamp="2026-10-13T15:37:28.170Z" encoding="Base64">ieO8OIyq8TFK+jIk10aAjl7piy2KCHhzSsTY3vQ1zRADQ7uDEExecYSH3efxmvY/tc3M52f4AMjNSL/VY0dOCQ==</Signature>

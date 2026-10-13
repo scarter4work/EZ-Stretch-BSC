@@ -56,7 +56,7 @@ Distribution-aware image stacking with per-pixel confidence scoring. Uses Welfor
 1. In PixInsight, go to **Resources > Updates > Manage Repositories**
 2. Click **Add** and enter this URL:
    ```
-   https://raw.githubusercontent.com/scarter4work/EZ-Stretch-BSC/main/repository/
+   https://raw.githubusercontent.com/scarter4work/astro-pi/main/repository/
    ```
 3. Click **OK**, then go to **Resources > Updates > Check for Updates**
 4. Select the scripts you want and click **Apply**
